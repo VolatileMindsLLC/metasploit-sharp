@@ -105,8 +105,24 @@ namespace metasploitsharp
 				{
 					string valyou = string.Empty;
 					foreach (object obj in (pair.Value as object[]))
-						valyou = valyou + (enc.GetString(obj as byte[]));
-					
+					{
+						valyou = string.Empty;
+						if (obj is Dictionary<object, object>)
+						{
+							foreach (KeyValuePair<object, object> p in (obj as Dictionary<object, object>))
+							{
+								string objKeyType = p.Key.GetType().ToString();
+								string objValueType = p.Value.GetType().ToString();
+								
+								if (p.Value.GetType() == typeof(byte[]))
+									valyou = valyou + enc.GetString(p.Key as byte[]) + ": " + enc.GetString(p.Value as byte[]) + "\n";
+								else if (p.Value.GetType() == typeof(bool))
+									valyou = valyou + enc.GetString(p.Key as byte[]) + ": " + ((bool)p.Value).ToString();
+							}
+						}
+						else
+							valyou = valyou + (enc.GetString(obj as byte[]));
+					}
 					returnDictionary.Add(enc.GetString(pair.Key as byte[]), valyou);
 				}
 				else if (pair.Value.GetType() == typeof(UInt32))

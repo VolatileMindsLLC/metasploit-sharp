@@ -26,6 +26,17 @@ namespace Examples
 					Console.WriteLine("\n\nVersion information:");
 					foreach (KeyValuePair<string, string> pair in version)
 						Console.WriteLine(pair.Key + ": " + pair.Value);
+					
+					Console.WriteLine("Creating console....");
+					Dictionary<string, string> consoleResponse = manager.CreateConsole();
+					foreach (KeyValuePair<string, string> pair in consoleResponse)
+						Console.WriteLine(pair.Key + ": " + pair.Value);
+					
+					Console.WriteLine("Console created, getting list of consoles...");
+					Dictionary<string, string> consoleList = manager.ListConsoles();
+					foreach (KeyValuePair<string, string> pair in consoleList)
+						Console.WriteLine(pair.Key + ": " + pair.Value);
+					
 				}
 			}
 		}
