@@ -14,18 +14,19 @@ namespace metasploitsharp
 		
 		public MetasploitSession (string username, string password, string host)
 		{
+			System.Text.Encoding enc = System.Text.Encoding.UTF8;
 			_host = host;
 			_token = null;
 			
-			Dictionary<string, string> response = this.Authenticate(username, password);
+			Dictionary<object, object> response = this.Authenticate(username, password);
 			
 			bool loggedIn = !response.ContainsKey("error");
 			
 			if (!loggedIn)
-				throw new Exception(response["error_message"]);
+				throw new Exception(response["error_message"] as string);
 			
-			if (response["result"] == "success")
-				_token = response["token"];
+			if (((string)response[((object)"result")]) == "success")
+				_token = response["token"] as string;
 		}
 		
 		public string Token { 
@@ -33,13 +34,13 @@ namespace metasploitsharp
 		}
 		
 		
-		public Dictionary<string, string> Authenticate(string username, string password)
+		public Dictionary<object, object> Authenticate(string username, string password)
 		{
 			return this.Execute("auth.login", new object[] { username, password });
 		}
 		
 		//Yay, fun method!
-		public Dictionary<string, string> Execute(string method, object[] args)
+		public Dictionary<object, object> Execute(string method, object[] args)
 		{
 			if (string.IsNullOrEmpty(_host))
 				throw new Exception("Host null or empty");
@@ -88,8 +89,12 @@ namespace metasploitsharp
 			requestStream.Close();
 			
 			Stream responseStream = request.GetResponse().GetResponseStream();
+			
+			//everything is a bunch of bytes, needs to be typed
 			Dictionary<object, object> resp = boxingPacker.Unpack(responseStream) as Dictionary<object, object>;
-			Dictionary<string, string> returnDictionary = new Dictionary<string, string>();
+			
+			//This is me trying to type the response for the user....
+			Dictionary<object, object> returnDictionary = new Dictionary<object, object>();
 			
 			System.Text.Encoding enc = System.Text.Encoding.UTF8;
 			foreach (KeyValuePair<object, object> pair in resp)
@@ -103,27 +108,35 @@ namespace metasploitsharp
 					returnDictionary.Add(enc.GetString(pair.Key as byte[]), enc.GetString(pair.Value as byte[]));
 				else if (pair.Value.GetType() == typeof(object[]))
 				{
-					string valyou = string.Empty;
-					foreach (object obj in (pair.Value as object[]))
-					{
-						valyou = string.Empty;
-						if (obj is Dictionary<object, object>)
-						{
-							foreach (KeyValuePair<object, object> p in (obj as Dictionary<object, object>))
-							{
-								string objKeyType = p.Key.GetType().ToString();
-								string objValueType = p.Value.GetType().ToString();
-								
-								if (p.Value.GetType() == typeof(byte[]))
-									valyou = valyou + enc.GetString(p.Key as byte[]) + ": " + enc.GetString(p.Value as byte[]) + "\n";
-								else if (p.Value.GetType() == typeof(bool))
-									valyou = valyou + enc.GetString(p.Key as byte[]) + ": " + ((bool)p.Value).ToString();
-							}
-						}
-						else
-							valyou = valyou + (enc.GetString(obj as byte[]));
-					}
-					returnDictionary.Add(enc.GetString(pair.Key as byte[]), valyou);
+					returnDictionary.Add(enc.GetString(pair.Key as byte[]), pair.Value);
+//					string valyou = string.Empty;
+//					
+//					foreach (object obj in (pair.Value as object[]))
+//					{
+//						valyou = string.Empty;
+//						if (obj is Dictionary<object, object>)
+//						{
+//							returnDictionary.Add(enc.GetString(pair.Key as byte[]), obj as Dictionary<object, object>);
+////							
+////							foreach (KeyValuePair<object, object> p in (obj as Dictionary<object, object>))
+////							{
+////								string objKeyType = p.Key.GetType().ToString();
+////								string objValueType = p.Value.GetType().ToString();
+////								
+////								if (p.Value.GetType() == typeof(byte[]))
+////									valyou = valyou + enc.GetString(p.Key as byte[]) + ": " + enc.GetString(p.Value as byte[]) + "\n";
+////								else if (p.Value.GetType() == typeof(bool))
+////									valyou = valyou + enc.GetString(p.Key as byte[]) + ": " + ((bool)p.Value).ToString();
+////							}
+//						}
+//						else
+//						{
+//							valyou = valyou + (enc.GetString(obj as byte[]));
+//						}
+//					}
+//					
+//					if (!string.IsNullOrEmpty(valyou))
+//						returnDictionary.Add(enc.GetString(pair.Key as byte[]), valyou);
 				}
 				else if (pair.Value.GetType() == typeof(UInt32))
 					returnDictionary.Add(enc.GetString(pair.Key as byte[]), ((UInt32)pair.Value).ToString());
