@@ -15,7 +15,6 @@ namespace Examples
 				
 				using (MetasploitManager manager = new MetasploitManager(session))
 				{
-					
 					Dictionary<string, string> modules = manager.GetCoreModuleStats();
 					
 					Console.WriteLine("Module stats:");
@@ -26,9 +25,7 @@ namespace Examples
 					
 					Console.WriteLine("\n\nVersion information:");
 					foreach (KeyValuePair<string, string> pair in version)
-						Console.WriteLine(pair.Key + ": " + pair.Value);	
-					
-					
+						Console.WriteLine(pair.Key + ": " + pair.Value);
 				}
 			}
 		}

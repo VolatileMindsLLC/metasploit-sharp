@@ -19,26 +19,18 @@ namespace metasploitsharp
 			
 			Dictionary<string, string> response = this.Authenticate(username, password);
 			
-			bool loggedIn = false;
-			foreach (KeyValuePair<string, string> pair in response)
-			{
-				if (pair.Key is string)
-				{
-					if ((pair.Key as string) == "result")
-					{
-						if ((pair.Value as string) == "success")
-							loggedIn = true;
-					}
-					else if ((pair.Key as string) == "token")
-						_token = pair.Value as string;
-					
-				}
-			}
+			bool loggedIn = !response.ContainsKey("error");
+			
+			if (!loggedIn)
+				throw new Exception(response["error_message"]);
+			
+			if (response["result"] == "success")
+				_token = response["token"];
 		}
 		
 		public string Token { 
-			get { return _token;}
-			}
+			get { return _token; }
+		}
 		
 		
 		public Dictionary<string, string> Authenticate(string username, string password)
@@ -63,7 +55,6 @@ namespace metasploitsharp
 			request.Method = "POST";
 			
 			Stream requestStream = request.GetRequestStream();
-			
 			MsgPackWriter msgpackWriter = new MsgPackWriter(requestStream);
 			
 			msgpackWriter.WriteArrayHeader(args.Length + 1 + (string.IsNullOrEmpty(_token) ? 0 : 1));
@@ -86,6 +77,7 @@ namespace metasploitsharp
 					}
 				}
 			}
+			
 			requestStream.Close();
 			
 			Stream responseStream = request.GetResponse().GetResponseStream();
@@ -118,7 +110,7 @@ namespace metasploitsharp
 					throw new Exception("key type: " + keyType + ", value type: " + valueType);
 			}	
 			
-				return returnDictionary;
+			return returnDictionary;
 		}
 		
 		public void Dispose()
