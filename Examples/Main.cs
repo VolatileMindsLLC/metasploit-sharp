@@ -33,6 +33,8 @@ namespace Examples
 					foreach (KeyValuePair<object, object> pair in consoleResponse)
 						Console.WriteLine(pair.Key + ": " + pair.Value);
 					
+					string consoleID = consoleResponse[((object)"id")] as string;
+					
 					Console.WriteLine("\n\nConsole created, getting list of consoles...");
 					Dictionary<object, object> consoleList = manager.ListConsoles();
 					foreach (KeyValuePair<object, object> pair in consoleList)
@@ -41,7 +43,7 @@ namespace Examples
 						
 						foreach (object obj in (pair.Value as object[]))
 						{
-							//each obj is a Dictionary<object, object>
+							//each obj is a Dictionary<object, object> in this response
 							foreach (KeyValuePair<object, object> p in obj as Dictionary<object, object>)
 							{
 								string pkType = p.Key.GetType().ToString();
@@ -56,6 +58,14 @@ namespace Examples
 							}
 						}
 					}
+					
+					Console.WriteLine("\n\nDestroying our console: " + consoleID);
+					Dictionary<object, object> destroyResponse = manager.DestroyConsole(consoleID);
+					foreach (KeyValuePair<object, object> pair in destroyResponse)
+						Console.WriteLine(pair.Key + ": " + pair.Value);
+					
+					if (destroyResponse.ContainsKey((object)"result") && ((string)destroyResponse[((object)"result")]) == "success")
+						Console.WriteLine("Destroyed.");
 					
 				}
 			}
