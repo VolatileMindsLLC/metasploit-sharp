@@ -47,7 +47,8 @@ namespace metasploitsharp
 			if (method != "auth.login" && string.IsNullOrEmpty(_token))
 				throw new Exception("Not authenticated.");
 		
-			BoxingPacker packer = new BoxingPacker();
+			BoxingPacker boxingPacker = new BoxingPacker();
+			CompiledPacker compiledPacker = new CompiledPacker(true);
 			ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => {return true;}; //dis be bad, no ssl check
 			
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_host);
@@ -58,6 +59,7 @@ namespace metasploitsharp
 			MsgPackWriter msgpackWriter = new MsgPackWriter(requestStream);
 			
 			msgpackWriter.WriteArrayHeader(args.Length + 1 + (string.IsNullOrEmpty(_token) ? 0 : 1));
+			
 			msgpackWriter.Write(method);
 			
 			if (!string.IsNullOrEmpty(_token))
@@ -69,19 +71,24 @@ namespace metasploitsharp
 					msgpackWriter.Write(arg as string);
 				else if (arg is Dictionary<object, object>)
 				{
-					msgpackWriter.WriteMapHeader((arg as Dictionary<object, object>).Count);
+					msgpackWriter.Write(compiledPacker.Pack<Dictionary<object, object>>(arg as Dictionary<object, object>));
 					
-					foreach (KeyValuePair<object, object> pair in (arg as Dictionary<object, object>))
-					{
-						
-					}
+//					msgpackWriter.WriteMapHeader((arg as Dictionary<object, object>).Count);
+//					
+//					object[] pairs = new object[(arg as Dictionary<object, object>).Count];
+//					
+//					int i = 0;
+//					foreach (object pair in (arg as Dictionary<object, object>))
+//						pairs[i++] = pair;
+//					
+					//packer.
 				}
 			}
 			
 			requestStream.Close();
 			
 			Stream responseStream = request.GetResponse().GetResponseStream();
-			Dictionary<object, object> resp = packer.Unpack(responseStream) as Dictionary<object, object>;
+			Dictionary<object, object> resp = boxingPacker.Unpack(responseStream) as Dictionary<object, object>;
 			Dictionary<string, string> returnDictionary = new Dictionary<string, string>();
 			
 			System.Text.Encoding enc = System.Text.Encoding.UTF8;

@@ -8,7 +8,7 @@ namespace Examples
 	{
 		public static void Main (string[] args)
 		{
-			using (MetasploitSession session = new MetasploitSession("metasploit", "password", "https://192.168.1.141:3790/api/1.1"))
+			using (MetasploitSession session = new MetasploitSession("metasploit", "P[.=~v5Y", "https://192.168.1.141:3790/api/1.1"))
 			{
 				if (string.IsNullOrEmpty(session.Token))
 					throw new Exception("Login failed. Check credentials");
