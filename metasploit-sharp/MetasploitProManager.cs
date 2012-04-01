@@ -65,7 +65,7 @@ namespace metasploitsharp
 		
 		public Dictionary<object, object> ActivateProOffline(string activationPath)
 		{
-			return _session.Execute("pro.activate_online", new object[] { activationPath });
+			return _session.Execute("pro.activate_offline", new object[] { activationPath });
 		}
 		
 		public Dictionary<object, object> GetProLicense()
