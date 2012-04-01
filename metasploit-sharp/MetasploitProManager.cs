@@ -282,10 +282,6 @@ namespace metasploitsharp
 		{
 			return _session.Execute("pro.meterpreter_tunnel_interfaces", new object[] { sessionID});
 		}
-			
-		
-		
-		
 	}
 }
 

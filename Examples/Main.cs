@@ -13,7 +13,7 @@ namespace Examples
 				if (string.IsNullOrEmpty(session.Token))
 					throw new Exception("Login failed. Check credentials");
 				
-				using (MetasploitManager manager = new MetasploitManager(session))
+				using (MetasploitProManager manager = new MetasploitProManager(session))
 				{
 					System.Text.Encoding enc = System.Text.Encoding.UTF8;
 					Dictionary<object, object> modules = manager.GetCoreModuleStats();
@@ -68,6 +68,18 @@ namespace Examples
 						Console.WriteLine("Destroyed.");
 					else
 						Console.WriteLine("Failed!");
+					
+					Dictionary<object, object> proVersion = manager.AboutPro();
+					
+					Console.WriteLine("\n\nInformation about pro:");
+					foreach (KeyValuePair<object, object> pair in proVersion)
+						Console.WriteLine(pair.Key + ": " + pair.Value);
+					
+					Dictionary<object, object> updateStatus = manager.ProUpdateStatus();
+					Console.WriteLine("\n\nUpdate status:");
+					
+					foreach(KeyValuePair<object, object> pair in updateStatus)
+						Console.WriteLine(pair.Key + ": " + pair.Value);
 					
 				}
 			}

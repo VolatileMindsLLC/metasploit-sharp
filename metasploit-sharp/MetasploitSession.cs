@@ -67,8 +67,11 @@ namespace metasploitsharp
 			
 			foreach (object arg in args)
 			{
+				//any applicable primitive types should be here...
 				if (arg is string)
 					msgpackWriter.Write(arg as string);
+				else if (arg is int)
+					msgpackWriter.Write((int)arg);
 				else if (arg is Dictionary<object, object>)
 					msgpackWriter.Write(compiledPacker.Pack<Dictionary<object, object>>(arg as Dictionary<object, object>));
 			}
