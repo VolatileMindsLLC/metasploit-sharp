@@ -38,6 +38,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="MetasploitManager.cs" />
     <Compile Include="MetasploitSession.cs" />
+    <Compile Include="MetasploitProManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

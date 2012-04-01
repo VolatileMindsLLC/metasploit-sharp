@@ -14,7 +14,6 @@ namespace metasploitsharp
 		
 		public MetasploitSession (string username, string password, string host)
 		{
-			System.Text.Encoding enc = System.Text.Encoding.UTF8;
 			_host = host;
 			_token = null;
 			
@@ -25,7 +24,7 @@ namespace metasploitsharp
 			if (!loggedIn)
 				throw new Exception(response["error_message"] as string);
 			
-			if (((string)response[((object)"result")]) == "success")
+			if ((response["result"] as string) == "success")
 				_token = response["token"] as string;
 		}
 		

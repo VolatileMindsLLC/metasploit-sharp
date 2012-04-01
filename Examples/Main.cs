@@ -20,7 +20,7 @@ namespace Examples
 					
 					Console.WriteLine("Module stats:");
 					foreach (KeyValuePair<object, object> pair in modules)
-						Console.WriteLine(pair.Key + ": " + pair.Value );
+						Console.WriteLine(pair.Key + ": " + pair.Value);
 					
 					Dictionary<object, object> version = manager.GetCoreVersionInformation();
 					
@@ -28,7 +28,7 @@ namespace Examples
 					foreach (KeyValuePair<object, object> pair in version)
 						Console.WriteLine(pair.Key + ": " + pair.Value);
 					
-					Console.WriteLine("\n\nCreating console....");
+					Console.WriteLine("\n\nCreating console...");
 					Dictionary<object, object> consoleResponse = manager.CreateConsole();
 					foreach (KeyValuePair<object, object> pair in consoleResponse)
 						Console.WriteLine(pair.Key + ": " + pair.Value);
@@ -66,6 +66,8 @@ namespace Examples
 					
 					if (destroyResponse.ContainsKey((object)"result") && ((string)destroyResponse[((object)"result")]) == "success")
 						Console.WriteLine("Destroyed.");
+					else
+						Console.WriteLine("Failed!");
 					
 				}
 			}
