@@ -10,9 +10,6 @@ namespace Examples
 		{
 			using (MetasploitSession session = new MetasploitSession("metasploit", "-LG.\"9U5", "https://192.168.1.148:3790/api/1.1"))
 			{
-				if (string.IsNullOrEmpty(session.Token))
-					throw new Exception("Login failed. Check credentials");
-				
 				using (MetasploitProManager manager = new MetasploitProManager(session))
 				{
 					System.Text.Encoding enc = System.Text.Encoding.UTF8;
