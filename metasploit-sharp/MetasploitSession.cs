@@ -73,7 +73,7 @@ namespace metasploitsharp
 				else if (arg is int)
 					msgpackWriter.Write((int)arg);
 				else if (arg is Dictionary<object, object>)
-					msgpackWriter.Write(compiledPacker.Pack<Dictionary<object, object>>(arg as Dictionary<object, object>));
+					msgpackWriter.Write(boxingPacker.Pack(arg));
 			}
 			
 			requestStream.Close();
@@ -90,20 +90,27 @@ namespace metasploitsharp
 			foreach (KeyValuePair<object, object> pair in resp)
 			{
 				string keyType = pair.Key.GetType().ToString();
-				string valueType = pair.Value.GetType().ToString();
+				string valueType = string.Empty;
 				
-				if (pair.Value.GetType() == typeof(bool))
-					returnDictionary.Add(enc.GetString(pair.Key as byte[]), ((bool)pair.Value).ToString());
-				else if (pair.Value.GetType() == typeof(byte[]))
-					returnDictionary.Add(enc.GetString(pair.Key as byte[]), enc.GetString(pair.Value as byte[]));
-				else if (pair.Value.GetType() == typeof(object[]))
-					returnDictionary.Add(enc.GetString(pair.Key as byte[]), pair.Value);
-				else if (pair.Value.GetType() == typeof(UInt32))
-					returnDictionary.Add(enc.GetString(pair.Key as byte[]), ((UInt32)pair.Value).ToString());
-				else if (pair.Value.GetType() == typeof(Int32))
-					returnDictionary.Add(enc.GetString(pair.Key as byte[]), ((Int32)pair.Value).ToString());
+				if (pair.Value != null)
+				{
+					valueType = pair.Value.GetType().ToString();
+				
+					if (pair.Value.GetType() == typeof(bool))
+						returnDictionary.Add(enc.GetString(pair.Key as byte[]), ((bool)pair.Value).ToString());
+					else if (pair.Value.GetType() == typeof(byte[]))
+						returnDictionary.Add(enc.GetString(pair.Key as byte[]), enc.GetString(pair.Value as byte[]));
+					else if (pair.Value.GetType() == typeof(object[]))
+						returnDictionary.Add(enc.GetString(pair.Key as byte[]), pair.Value);
+					else if (pair.Value.GetType() == typeof(UInt32))
+						returnDictionary.Add(enc.GetString(pair.Key as byte[]), ((UInt32)pair.Value).ToString());
+					else if (pair.Value.GetType() == typeof(Int32))
+						returnDictionary.Add(enc.GetString(pair.Key as byte[]), ((Int32)pair.Value).ToString());
+					else
+						throw new Exception("key type: " + keyType + ", value type: " + valueType);
+				}
 				else
-					throw new Exception("key type: " + keyType + ", value type: " + valueType);
+					returnDictionary.Add(enc.GetString(pair.Key as byte[]), string.Empty);
 			}	
 			
 			return returnDictionary;

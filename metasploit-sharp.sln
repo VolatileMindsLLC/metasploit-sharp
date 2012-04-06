@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples", "Examples\Exampl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsgPack", "..\msgpack\csharp\MsgPack\MsgPack.csproj", "{E1809531-EC2A-4EA6-B0E8-CC815EDFAA2F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleExecuteExample", "ModuleExecuteExample\ModuleExecuteExample.csproj", "{F48E0B9A-9F7A-4E46-B1D4-1386420D4C15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -25,8 +27,12 @@ Global
 		{E1809531-EC2A-4EA6-B0E8-CC815EDFAA2F}.Debug|x86.Build.0 = Debug|Any CPU
 		{E1809531-EC2A-4EA6-B0E8-CC815EDFAA2F}.Release|x86.ActiveCfg = Release|Any CPU
 		{E1809531-EC2A-4EA6-B0E8-CC815EDFAA2F}.Release|x86.Build.0 = Release|Any CPU
+		{F48E0B9A-9F7A-4E46-B1D4-1386420D4C15}.Debug|x86.ActiveCfg = Debug|x86
+		{F48E0B9A-9F7A-4E46-B1D4-1386420D4C15}.Debug|x86.Build.0 = Debug|x86
+		{F48E0B9A-9F7A-4E46-B1D4-1386420D4C15}.Release|x86.ActiveCfg = Release|x86
+		{F48E0B9A-9F7A-4E46-B1D4-1386420D4C15}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Examples\Examples.csproj
+		StartupItem = ModuleExecuteExample\ModuleExecuteExample.csproj
 	EndGlobalSection
 EndGlobal

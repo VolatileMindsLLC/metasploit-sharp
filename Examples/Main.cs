@@ -8,7 +8,7 @@ namespace Examples
 	{
 		public static void Main (string[] args)
 		{
-			using (MetasploitSession session = new MetasploitSession("metasploit", "P[.=~v5Y", "https://192.168.1.141:3790/api/1.1"))
+			using (MetasploitSession session = new MetasploitSession("metasploit", "-LG.\"9U5", "https://192.168.1.148:3790/api/1.1"))
 			{
 				if (string.IsNullOrEmpty(session.Token))
 					throw new Exception("Login failed. Check credentials");
@@ -33,7 +33,7 @@ namespace Examples
 					foreach (KeyValuePair<object, object> pair in consoleResponse)
 						Console.WriteLine(pair.Key + ": " + pair.Value);
 					
-					string consoleID = consoleResponse[((object)"id")] as string;
+					string consoleID = consoleResponse["id"] as string;
 					
 					Console.WriteLine("\n\nConsole created, getting list of consoles...");
 					Dictionary<object, object> consoleList = manager.ListConsoles();
