@@ -48,8 +48,7 @@ namespace metasploitsharp
 		
 			BoxingPacker boxingPacker = new BoxingPacker ();
 			CompiledPacker compiledPacker = new CompiledPacker (false);
-			ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => {
-				return true;}; //dis be bad, no ssl check
+			ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => {return true;}; //dis be bad, no ssl check
 			
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create (_host);
 			request.ContentType = "binary/message-pack";
@@ -66,7 +65,7 @@ namespace metasploitsharp
 				msgpackWriter.Write (_token);
 			
 			foreach (object arg in args) {
-				//any applicable primitive types should be here...
+				//any applicable types should be here...
 				if (arg is string)
 					msgpackWriter.Write (arg as string);
 				else if (arg is int)
@@ -91,15 +90,18 @@ namespace metasploitsharp
 			Dictionary<object, object > resp = boxingPacker.Unpack (responseStream) as Dictionary<object, object>;
 			
 			//This is me trying to type the response for the user....
-			Dictionary<object, object > returnDictionary = new Dictionary<object, object> ();
-			
-			System.Text.Encoding enc = System.Text.Encoding.UTF8;
-			foreach (KeyValuePair<object, object> pair in resp) {
-				string keyType = pair.Key.GetType ().ToString ();
-				string valueType = string.Empty;
-				
+			Dictionary<object, object > returnDictionary = TypifyDictionary(resp);
+
+			return returnDictionary;
+		}
+		
+		Dictionary<object, object> TypifyDictionary(Dictionary<object, object> dict)
+		{
+			Dictionary<object, object> returnDictionary = new Dictionary<object, object>();
+			System.Text.Encoding enc = System.Text.Encoding.ASCII;
+			foreach (var pair in dict)
+			{
 				if (pair.Value != null) {
-					valueType = pair.Value.GetType ().ToString ();
 				
 					if (pair.Value.GetType () == typeof(bool))
 						returnDictionary.Add (enc.GetString (pair.Key as byte[]), ((bool)pair.Value).ToString ());
@@ -112,12 +114,12 @@ namespace metasploitsharp
 					else if (pair.Value.GetType () == typeof(Int32))
 						returnDictionary.Add (enc.GetString (pair.Key as byte[]), ((Int32)pair.Value).ToString ());
 					else if (pair.Value.GetType () == typeof(Dictionary<object, object>))
-						returnDictionary.Add (pair.Key, pair.Value as Dictionary<object, object>);
+						returnDictionary.Add (pair.Key, TypifyDictionary(pair.Value as Dictionary<object, object>));
 					else
-						throw new Exception ("key type: " + keyType + ", value type: " + valueType);
+						throw new Exception ("unknown type: " + pair.Value.GetType().ToString());
 				} else
 					returnDictionary.Add (enc.GetString (pair.Key as byte[]), string.Empty);
-			}	
+			}
 			
 			return returnDictionary;
 		}
