@@ -57,6 +57,6 @@ Global
 		{F48E0B9A-9F7A-4E46-B1D4-1386420D4C15}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = GetReportForWorkspace\GetReportForWorkspace.csproj
+		StartupItem = Examples\Examples.csproj
 	EndGlobalSection
 EndGlobal

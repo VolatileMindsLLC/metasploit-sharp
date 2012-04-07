@@ -43,15 +43,7 @@ namespace Examples
 							//each obj is a Dictionary<object, object> in this response
 							foreach (KeyValuePair<object, object> p in obj as Dictionary<object, object>)
 							{
-								string pkType = p.Key.GetType().ToString();
-								string pvType = p.Value.GetType().ToString();
-								
-								if (p.Value.GetType() == typeof(byte[]))
-									Console.WriteLine(enc.GetString(p.Key as byte[]) + ": " + enc.GetString(p.Value as byte[]));
-								else if (p.Value.GetType() == typeof(bool))
-									Console.WriteLine(enc.GetString(p.Key as byte[]) + ": " + ((bool)p.Value).ToString());
-								else
-									throw new Exception(pkType + ": " + pvType);
+								Console.WriteLine(p.Key + ": " + p.Value);
 							}
 						}
 					}

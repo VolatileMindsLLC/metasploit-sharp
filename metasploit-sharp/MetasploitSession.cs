@@ -102,13 +102,28 @@ namespace metasploitsharp
 			foreach (var pair in dict)
 			{
 				if (pair.Value != null) {
-				
 					if (pair.Value.GetType () == typeof(bool))
 						returnDictionary.Add (enc.GetString (pair.Key as byte[]), ((bool)pair.Value).ToString ());
 					else if (pair.Value.GetType () == typeof(byte[]))
 						returnDictionary.Add (enc.GetString (pair.Key as byte[]), enc.GetString (pair.Value as byte[]));
 					else if (pair.Value.GetType () == typeof(object[]))
-						returnDictionary.Add (enc.GetString (pair.Key as byte[]), pair.Value);
+					{
+						object[] ret = new object[(pair.Value as object[]).Length];
+						int i = 0;
+						foreach (object obj in pair.Value as object[])
+						{
+							if (obj.GetType() == typeof(Dictionary<object, object>))
+								ret[i] = TypifyDictionary(obj as Dictionary<object, object>);
+							else if (obj.GetType() == typeof(byte[]))
+								ret[i] = enc.GetString(obj as byte[]);
+							else
+								throw new Exception("Don't know how to do type: " + obj.GetType().ToString());
+							
+							i++;
+						}
+						
+						returnDictionary.Add(enc.GetString(pair.Key as byte[]), ret);
+					}
 					else if (pair.Value.GetType () == typeof(UInt32))
 						returnDictionary.Add (enc.GetString (pair.Key as byte[]), ((UInt32)pair.Value).ToString ());
 					else if (pair.Value.GetType () == typeof(Int32))
