@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartImport", "StartImport\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartExploit", "StartExploit\StartExploit.csproj", "{B6DBD3CF-7367-49AC-920B-D3D06846C3A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateWorkspace", "CreateWorkspace\CreateWorkspace.csproj", "{3D4A7E00-AC56-4B9E-962C-BD576B00773B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -23,6 +25,10 @@ Global
 		{0BBE3B7A-F7C9-4EF2-B47A-988531261A5E}.Debug|x86.Build.0 = Debug|x86
 		{0BBE3B7A-F7C9-4EF2-B47A-988531261A5E}.Release|x86.ActiveCfg = Release|x86
 		{0BBE3B7A-F7C9-4EF2-B47A-988531261A5E}.Release|x86.Build.0 = Release|x86
+		{3D4A7E00-AC56-4B9E-962C-BD576B00773B}.Debug|x86.ActiveCfg = Debug|x86
+		{3D4A7E00-AC56-4B9E-962C-BD576B00773B}.Debug|x86.Build.0 = Debug|x86
+		{3D4A7E00-AC56-4B9E-962C-BD576B00773B}.Release|x86.ActiveCfg = Release|x86
+		{3D4A7E00-AC56-4B9E-962C-BD576B00773B}.Release|x86.Build.0 = Release|x86
 		{6751C52A-1C35-40C0-ABCF-B5EC9ED493F4}.Debug|x86.ActiveCfg = Debug|x86
 		{6751C52A-1C35-40C0-ABCF-B5EC9ED493F4}.Debug|x86.Build.0 = Debug|x86
 		{6751C52A-1C35-40C0-ABCF-B5EC9ED493F4}.Release|x86.ActiveCfg = Release|x86
@@ -45,6 +51,6 @@ Global
 		{F48E0B9A-9F7A-4E46-B1D4-1386420D4C15}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = StartExploit\StartExploit.csproj
+		StartupItem = CreateWorkspace\CreateWorkspace.csproj
 	EndGlobalSection
 EndGlobal
