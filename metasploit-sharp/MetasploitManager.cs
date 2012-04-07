@@ -207,6 +207,11 @@ namespace metasploitsharp
 			return _session.Execute("session.stop", new object[] { sessionID});
 		}
 		
+		public Dictionary<object, object> ReadSessionShell(string sessionID)
+		{
+			return this.ReadSessionShell(sessionID, null);
+		}
+		
 		public Dictionary<object, object> ReadSessionShell(string sessionID, int? readPointer)
 		{
 			if (readPointer.HasValue)

