@@ -12,8 +12,6 @@ namespace StartImport
 			{
 				using (MetasploitProManager manager = new MetasploitProManager(session))
 				{
-					string workspace = Guid.NewGuid().ToString();
-					
 					Dictionary<object, object> options = new Dictionary<object, object>();
 					options.Add("workspace", "default");
 					options.Add("DS_PATH", "/tmp/efc63839-ae8d-4caf-92f5-3f3ff7b6e306");
@@ -24,8 +22,6 @@ namespace StartImport
 						Console.WriteLine(pair.Key + ": " + pair.Value);
 					
 					response = manager.GetProTaskStatus(response["task_id"] as string);
-					
-					System.Text.Encoding enc = System.Text.Encoding.ASCII;
 					
 					foreach (var pair in response)
 					{

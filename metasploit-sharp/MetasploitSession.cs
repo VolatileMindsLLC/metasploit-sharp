@@ -37,7 +37,6 @@ namespace metasploitsharp
 			return this.Execute ("auth.login", new object[] { username, password });
 		}
 		
-		//Yay, fun method!
 		public Dictionary<object, object> Execute (string method, object[] args)
 		{
 			if (string.IsNullOrEmpty (_host))
@@ -47,7 +46,6 @@ namespace metasploitsharp
 				throw new Exception ("Not authenticated.");
 		
 			BoxingPacker boxingPacker = new BoxingPacker ();
-			CompiledPacker compiledPacker = new CompiledPacker (false);
 			ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => {return true;}; //dis be bad, no ssl check
 			
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create (_host);
@@ -64,23 +62,8 @@ namespace metasploitsharp
 			if (!string.IsNullOrEmpty (_token))
 				msgpackWriter.Write (_token);
 			
-			foreach (object arg in args) {
-				//any applicable types should be here...
-				if (arg is string)
-					msgpackWriter.Write (arg as string);
-				else if (arg is int)
-					msgpackWriter.Write ((int)arg);
-				else if (arg is Dictionary<object, object>) {
-					msgpackWriter.WriteMapHeader ((arg as Dictionary<object, object>).Count);
-					foreach (var e in arg as IDictionary<object, object>) {
-						Pack (msgpackWriter, e.Key);
-						Pack (msgpackWriter, e.Value);
-					}
-				} else if (arg == null)
-					msgpackWriter.WriteNil ();
-				else
-					throw new Exception ("I need a definition for type " + arg.GetType ().ToString ());
-			}
+			foreach (object arg in args) 
+				Pack(msgpackWriter, arg);
 			
 			requestStream.Close ();
 			
@@ -150,27 +133,27 @@ namespace metasploitsharp
 			Type t = o.GetType ();
  	 	
 			if (t.IsPrimitive) {
-				if (t.Equals (typeof(int)))
+				if (t == typeof(int))
 					writer.Write ((int)o);
-				else if (t.Equals (typeof(uint)))
+				else if (t == typeof(uint))
 					writer.Write ((uint)o);
-				else if (t.Equals (typeof(float)))
+				else if (t == typeof(float))
 					writer.Write ((float)o);
-				else if (t.Equals (typeof(double)))
+				else if (t == typeof(double))
 					writer.Write ((double)o);
-				else if (t.Equals (typeof(long)))
+				else if (t == typeof(long))
 					writer.Write ((long)o);
-				else if (t.Equals (typeof(ulong)))
+				else if (t == typeof(ulong))
 					writer.Write ((ulong)o);
-				else if (t.Equals (typeof(bool)))
+				else if (t == typeof(bool))
 					writer.Write ((bool)o);
-				else if (t.Equals (typeof(byte)))
+				else if (t == typeof(byte))
 					writer.Write ((byte)o);
-				else if (t.Equals (typeof(sbyte)))
+				else if (t == typeof(sbyte))
 					writer.Write ((sbyte)o);
-				else if (t.Equals (typeof(short)))
+				else if (t == typeof(short))
 					writer.Write ((short)o);
-				else if (t.Equals (typeof(ushort)))
+				else if (t == typeof(ushort))
 					writer.Write ((ushort)o);
 				else
 					throw new NotSupportedException ();  // char?
@@ -181,6 +164,19 @@ namespace metasploitsharp
 			{
 				if (t == typeof(string))
 					writer.Write(o as string);
+				else if (t == typeof(Dictionary<object, object>))
+				{
+					writer.WriteMapHeader((o as Dictionary<object, object>).Count);
+					
+					foreach (var pair in (o as Dictionary<object, object>))
+					{
+						Pack(writer, pair.Key);
+						Pack(writer, pair.Value);
+					}
+					
+				}
+				else
+					throw new NotSupportedException (); 
 			}
 		}
 		

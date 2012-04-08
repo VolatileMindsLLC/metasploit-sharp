@@ -12,7 +12,6 @@ namespace Examples
 			{
 				using (MetasploitProManager manager = new MetasploitProManager(session))
 				{
-					System.Text.Encoding enc = System.Text.Encoding.UTF8;
 					Dictionary<object, object> modules = manager.GetCoreModuleStats();
 					
 					Console.WriteLine("Module stats:");
