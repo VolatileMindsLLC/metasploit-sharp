@@ -8,7 +8,7 @@ namespace CreateWorkspace
 	{
 		public static void Main (string[] args)
 		{
-			using (MetasploitSession session = new MetasploitSession("metasploit", "-LG.\"9U5", "https://192.168.1.148:3790/api/1.1"))
+			using (MetasploitSession session = new MetasploitSession("metasploit", "2c8X|a2!", "https://192.168.1.148:3790/api/1.1"))
 			{
 				using (MetasploitProManager manager = new MetasploitProManager(session))
 				{
