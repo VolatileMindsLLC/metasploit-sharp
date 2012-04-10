@@ -1,1 +1,1 @@
-C# library allowing programmatic access to the Metasploit MSGRPC. Many examples are included. metasploit-sharp is the folder of the core library. Every other folder conatins example code.
+C# library allowing programmatic access to the Metasploit MSGRPC. Many examples are included. metasploit-sharp is the folder of the core library. Every other folder contains example code.
