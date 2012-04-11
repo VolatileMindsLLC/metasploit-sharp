@@ -34,10 +34,10 @@ namespace metasploitsharp
 		
 		public Dictionary<object, object> Authenticate (string username, string password)
 		{
-			return this.Execute ("auth.login", new object[] { username, password });
+			return this.Execute ("auth.login", username, password);
 		}
 		
-		public Dictionary<object, object> Execute (string method, object[] args)
+		public Dictionary<object, object> Execute (string method, params object[] args)
 		{
 			if (string.IsNullOrEmpty (_host))
 				throw new Exception ("Host null or empty");
@@ -85,19 +85,19 @@ namespace metasploitsharp
 			foreach (var pair in dict)
 			{
 				if (pair.Value != null) {
-					if (pair.Value.GetType () == typeof(bool))
+					if (pair.Value is bool)
 						returnDictionary.Add (enc.GetString (pair.Key as byte[]), ((bool)pair.Value).ToString ());
-					else if (pair.Value.GetType () == typeof(byte[]))
+					else if (pair.Value is byte[])
 						returnDictionary.Add (enc.GetString (pair.Key as byte[]), enc.GetString (pair.Value as byte[]));
-					else if (pair.Value.GetType () == typeof(object[]))
+					else if (pair.Value is object[])
 					{
 						object[] ret = new object[(pair.Value as object[]).Length];
 						int i = 0;
 						foreach (object obj in pair.Value as object[])
 						{
-							if (obj.GetType() == typeof(Dictionary<object, object>))
+							if (obj is Dictionary<object, object>)
 								ret[i] = TypifyDictionary(obj as Dictionary<object, object>);
-							else if (obj.GetType() == typeof(byte[]))
+							else if (obj is byte[])
 								ret[i] = enc.GetString(obj as byte[]);
 							else
 								throw new Exception("Don't know how to do type: " + obj.GetType().ToString());
@@ -107,11 +107,11 @@ namespace metasploitsharp
 						
 						returnDictionary.Add(enc.GetString(pair.Key as byte[]), ret);
 					}
-					else if (pair.Value.GetType () == typeof(UInt32))
+					else if (pair.Value is UInt32)
 						returnDictionary.Add (enc.GetString (pair.Key as byte[]), ((UInt32)pair.Value).ToString ());
-					else if (pair.Value.GetType () == typeof(Int32))
+					else if (pair.Value is Int32)
 						returnDictionary.Add (enc.GetString (pair.Key as byte[]), ((Int32)pair.Value).ToString ());
-					else if (pair.Value.GetType () == typeof(Dictionary<object, object>))
+					else if (pair.Value is Dictionary<object, object>)
 						returnDictionary.Add (pair.Key, TypifyDictionary(pair.Value as Dictionary<object, object>));
 					else
 						throw new Exception ("unknown type: " + pair.Value.GetType().ToString());
@@ -129,55 +129,45 @@ namespace metasploitsharp
 				writer.WriteNil ();
 				return;
 			}
- 	 	
-			Type t = o.GetType ();
- 	 	
-			if (t.IsPrimitive) {
-				if (t == typeof(int))
-					writer.Write ((int)o);
-				else if (t == typeof(uint))
-					writer.Write ((uint)o);
-				else if (t == typeof(float))
-					writer.Write ((float)o);
-				else if (t == typeof(double))
-					writer.Write ((double)o);
-				else if (t == typeof(long))
-					writer.Write ((long)o);
-				else if (t == typeof(ulong))
-					writer.Write ((ulong)o);
-				else if (t == typeof(bool))
-					writer.Write ((bool)o);
-				else if (t == typeof(byte))
-					writer.Write ((byte)o);
-				else if (t == typeof(sbyte))
-					writer.Write ((sbyte)o);
-				else if (t == typeof(short))
-					writer.Write ((short)o);
-				else if (t == typeof(ushort))
-					writer.Write ((ushort)o);
-				else
-					throw new NotSupportedException ();  // char?
- 	 	
-				return;
+ 	
+			if (o is int)
+				writer.Write ((int)o);
+			else if (o is uint)
+				writer.Write ((uint)o);
+			else if (o is float)
+				writer.Write ((float)o);
+			else if (o is double)
+				writer.Write ((double)o);
+			else if (o is long)
+				writer.Write ((long)o);
+			else if (o is ulong)
+				writer.Write ((ulong)o);
+			else if (o is bool)
+				writer.Write ((bool)o);
+			else if (o is byte)
+				writer.Write ((byte)o);
+			else if (o is sbyte)
+				writer.Write ((sbyte)o);
+			else if (o is short)
+				writer.Write ((short)o);
+			else if (o is ushort)
+				writer.Write ((ushort)o);
+			else if (o is string)
+				writer.Write(o as string);
+			else if (o is Dictionary<object, object>)
+			{
+				writer.WriteMapHeader((o as Dictionary<object, object>).Count);
+				
+				foreach (var pair in (o as Dictionary<object, object>))
+				{
+					Pack(writer, pair.Key);
+					Pack(writer, pair.Value);
+				}
+				
 			}
 			else
-			{
-				if (t == typeof(string))
-					writer.Write(o as string);
-				else if (t == typeof(Dictionary<object, object>))
-				{
-					writer.WriteMapHeader((o as Dictionary<object, object>).Count);
-					
-					foreach (var pair in (o as Dictionary<object, object>))
-					{
-						Pack(writer, pair.Key);
-						Pack(writer, pair.Value);
-					}
-					
-				}
-				else
-					throw new NotSupportedException (); 
-			}
+				throw new NotSupportedException (); 
+		
 		}
 		
 		public void Dispose ()

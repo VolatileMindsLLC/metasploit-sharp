@@ -1,22 +1,25 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="CreateWorkspace/Main.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="metasploit-sharp/MetasploitSession.cs">
     <Files>
-      <File FileName="metasploit-sharp/MetasploitManager.cs" Line="182" Column="1" />
-      <File FileName="metasploit-sharp/MetasploitSession.cs" Line="25" Column="1" />
-      <File FileName="../msgpack/csharp/MsgPack/Compiler/PackILGenerator.cs" Line="38" Column="62" />
-      <File FileName="StartImport/Main.cs" Line="11" Column="76" />
-      <File FileName="../msgpack/csharp/MsgPack/CompiledPacker.cs" Line="93" Column="1" />
-      <File FileName="Examples/Main.cs" Line="32" Column="6" />
-      <File FileName="ModuleExecuteExample/Main.cs" Line="43" Column="6" />
-      <File FileName="StartExploit/Main.cs" Line="22" Column="36" />
+      <File FileName="metasploit-sharp/MetasploitManager.cs" Line="77" Column="23" />
+      <File FileName="metasploit-sharp/MetasploitSession.cs" Line="144" Column="32" />
+      <File FileName="StartImport/Main.cs" Line="35" Column="8" />
+      <File FileName="Examples/Main.cs" Line="14" Column="6" />
+      <File FileName="ModuleExecuteExample/Main.cs" Line="47" Column="43" />
+      <File FileName="StartExploit/Main.cs" Line="22" Column="32" />
       <File FileName="CreateWorkspace/Main.cs" Line="26" Column="6" />
+      <File FileName="GetReportForWorkspace/Main.cs" Line="54" Column="31" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="CreateWorkspace" expanded="True" selected="True" />
           <Node name="Examples" expanded="True" />
+          <Node name="metasploit-sharp" expanded="True">
+            <Node name="MetasploitSession.cs" selected="True" />
+          </Node>
+          <Node name="ModuleExecuteExample" expanded="True" />
+          <Node name="StartExploit" expanded="True" />
           <Node name="StartImport" expanded="True" />
         </State>
       </Pad>
