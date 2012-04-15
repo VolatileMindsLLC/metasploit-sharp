@@ -51,6 +51,7 @@ namespace metasploitsharp
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create (_host);
 			request.ContentType = "binary/message-pack";
 			request.Method = "POST";
+			request.KeepAlive = true;
 			
 			Stream requestStream = request.GetRequestStream ();
 			MsgPackWriter msgpackWriter = new MsgPackWriter (requestStream);
@@ -65,23 +66,43 @@ namespace metasploitsharp
 			foreach (object arg in args) 
 				Pack(msgpackWriter, arg);
 			
-			requestStream.Close ();
+			requestStream.Close();
 			
-			Stream responseStream = request.GetResponse ().GetResponseStream ();
+			byte[] results;
+			byte[] buffer = new byte[4096];
+			using (WebResponse response = request.GetResponse ())
+			{
+				using (Stream rstream = response.GetResponseStream())
+				{
+					using (MemoryStream mstream = new MemoryStream())
+					{
+						int count = 0;
+						
+						do
+						{
+							count = rstream.Read(buffer, 0, buffer.Length);
+							mstream.Write(buffer, 0, count);
+						} while (count != 0);
+						
+						results = mstream.ToArray();
+					}
+				}
+			}
+
 			
 			//everything is a bunch of bytes, needs to be typed
-			Dictionary<object, object > resp = boxingPacker.Unpack (responseStream) as Dictionary<object, object>;
+			Dictionary<object, object > resp = boxingPacker.Unpack (results) as Dictionary<object, object>;
 			
 			//This is me trying to type the response for the user....
 			Dictionary<object, object > returnDictionary = TypifyDictionary(resp);
-
+			
 			return returnDictionary;
 		}
 		
 		Dictionary<object, object> TypifyDictionary(Dictionary<object, object> dict)
 		{
 			Dictionary<object, object> returnDictionary = new Dictionary<object, object>();
-			System.Text.Encoding enc = System.Text.Encoding.ASCII;
+			System.Text.Encoding enc = System.Text.Encoding.UTF8;
 			foreach (var pair in dict)
 			{
 				if (pair.Value != null) {
