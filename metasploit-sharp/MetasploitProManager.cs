@@ -90,7 +90,7 @@ namespace metasploitsharp
 		
 		public Dictionary<object, object> ProInstallOfflineUpdates(string updatePath)
 		{
-			return _session.Execute("pro.update_instalL_offline", updatePath);
+			return _session.Execute("pro.update_install_offline", updatePath);
 		}
 		
 		public Dictionary<object, object> ProUpdateStatus()
