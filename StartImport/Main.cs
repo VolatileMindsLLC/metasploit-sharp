@@ -12,11 +12,11 @@ namespace StartImport
 			{
 				using (MetasploitProManager manager = new MetasploitProManager(session))
 				{
-					Dictionary<object, object> options = new Dictionary<object, object>();
+					Dictionary<string, object> options = new Dictionary<string, object>();
 					options.Add("workspace", "default");
 					options.Add("DS_PATH", "/tmp/efc63839-ae8d-4caf-92f5-3f3ff7b6e306");
 					
-					Dictionary<object, object> response = manager.StartImport(options);
+					Dictionary<string, object> response = manager.StartImport(options);
 					
 					foreach (var pair in response)
 						Console.WriteLine(pair.Key + ": " + pair.Value);
@@ -25,7 +25,7 @@ namespace StartImport
 					
 					foreach (var pair in response)
 					{
-						string stat = (pair.Value as Dictionary<object, object>)[(object)"status"] as string;
+						string stat = (pair.Value as Dictionary<string, object>)["status"] as string;
 						
 						while (stat == "running")
 						{
@@ -34,7 +34,7 @@ namespace StartImport
 							response = manager.GetProTaskStatus(response["task_id"] as string);
 							
 							foreach (var p in response)
-								stat = (p.Value as Dictionary<object, object>)["status"] as string;
+								stat = (p.Value as Dictionary<string, object>)["status"] as string;
 						}
 					}
 				}

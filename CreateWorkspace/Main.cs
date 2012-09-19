@@ -8,39 +8,72 @@ namespace CreateWorkspace
 	{
 		public static void Main (string[] args)
 		{
-			using (MetasploitSession session = new MetasploitSession("metasploit", "2c8X|a2!", "https://192.168.1.148:3790/api/1.1"))
+			using (MetasploitSession session = new MetasploitSession("metasploit", "P@ssw0rd!", "https://192.168.1.5:3790/api/1.1"))
 			{
 				using (MetasploitProManager manager = new MetasploitProManager(session))
 				{
-					string workspace = Guid.NewGuid().ToString();
+					Dictionary<string, object> modules = manager.GetCoreModuleStats();
 					
-					Dictionary<object, object> options = new Dictionary<object, object>();
-					options.Add("name", workspace);
-					
-					Dictionary<object, object> response = manager.AddProProject(options);
-					
-					foreach (var pair in response)
+					Console.WriteLine("Module stats:");
+					foreach (KeyValuePair<string, object> pair in modules)
 						Console.WriteLine(pair.Key + ": " + pair.Value);
 					
-					response = manager.DeleteProWorkspace(workspace);
+					Dictionary<string, object> version = manager.GetCoreVersionInformation();
 					
-					foreach (var pair in response)
+					Console.WriteLine("\n\nVersion information:");
+					foreach (KeyValuePair<string, object> pair in version)
 						Console.WriteLine(pair.Key + ": " + pair.Value);
 					
-					response = manager.CreateConsole();
-					
-					workspace = Guid.NewGuid().ToString();
-					string consoleID = response["id"] as string;
-					
-					response = manager.WriteToConsole(consoleID, "workspace -a " + workspace + "\n");
-					response = manager.WriteToConsole(consoleID, "workspace\n");
-					response = manager.WriteToConsole(consoleID, "workspace -d " + workspace + "\n");
-					response = manager.ReadConsole(consoleID);
-					
-					foreach (var pair in response)
+					Console.WriteLine("\n\nCreating console...");
+					Dictionary<string, object> consoleResponse = manager.CreateConsole();
+					foreach (KeyValuePair<string, object> pair in consoleResponse)
 						Console.WriteLine(pair.Key + ": " + pair.Value);
 					
-					manager.DestroyConsole(consoleID);
+					string consoleID = consoleResponse["id"] as string;
+					
+					Console.WriteLine("\n\nConsole created, getting list of consoles...");
+					Dictionary<string, object> consoleList = manager.ListConsoles();
+					foreach (KeyValuePair<string, object> pair in consoleList)
+					{
+						Console.WriteLine(pair.Value.GetType().Name);
+						
+						foreach (var obj in pair.Value as List<object>) 
+						{
+							//each obj is a Dictionary<string, object> in this response
+							if (obj is IDictionary<string, object>)
+							{
+								foreach (var p in obj as IDictionary<string, object>)
+								{
+									Console.WriteLine(p.Key + ": " + p.Value);
+								}
+							}
+							else
+								Console.WriteLine(obj);
+						}
+					}
+					
+					Console.WriteLine("\n\nDestroying our console: " + consoleID);
+					Dictionary<string, object> destroyResponse = manager.DestroyConsole(consoleID);
+					foreach (KeyValuePair<string, object> pair in destroyResponse)
+						Console.WriteLine(pair.Key + ": " + pair.Value);
+					
+					if (destroyResponse.ContainsKey("result") && ((string)destroyResponse["result"]) == "success")
+						Console.WriteLine("Destroyed.");
+					else
+						Console.WriteLine("Failed!");
+					
+					Dictionary<string, object> proVersion = manager.AboutPro();
+					
+					Console.WriteLine("\n\nInformation about pro:");
+					foreach (KeyValuePair<string, object> pair in proVersion)
+						Console.WriteLine(pair.Key + ": " + pair.Value);
+					
+					Dictionary<string, object> updateStatus = manager.ProUpdateStatus();
+					Console.WriteLine("\n\nUpdate status:");
+					
+					foreach(KeyValuePair<string, object> pair in updateStatus)
+						Console.WriteLine(pair.Key + ": " + pair.Value);
+					
 				}
 			}
 		}

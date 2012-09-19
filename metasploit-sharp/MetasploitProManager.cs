@@ -13,272 +13,272 @@ namespace metasploitsharp
 			_session = session;
 		}
 		
-		public Dictionary<object, object> AboutPro()
+		public Dictionary<string, object> AboutPro()
 		{
 			return _session.Execute("pro.about");
 		}
 		
-		public Dictionary<object, object> ListProWorkspaces()
+		public Dictionary<string, object> ListProWorkspaces()
 		{
 			return _session.Execute("pro.workspaces");
 		}
 		
-		public Dictionary<object, object> ListProProjects()
+		public Dictionary<string, object> ListProProjects()
 		{
 			return _session.Execute("pro.projects");
 		}
 		
-		public Dictionary<object, object> AddProWorkspace(Dictionary<object, object> options)
+		public Dictionary<string, object> AddProWorkspace(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.workspace_add", options);
 		}
 		
-		public Dictionary<object, object> AddProProject(Dictionary<object, object> options)
+		public Dictionary<string, object> AddProProject(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.project_add", options);
 		}
 		
-		public Dictionary<object, object> DeleteProWorkspace(string workspaceName)
+		public Dictionary<string, object> DeleteProWorkspace(string workspaceName)
 		{
 			return _session.Execute("pro.workspace_del", workspaceName);
 		}
 		
-		public Dictionary<object, object> DeleteProProject(string workspaceName)
+		public Dictionary<string, object> DeleteProProject(string workspaceName)
 		{
 			return _session.Execute("pro.project_del", workspaceName);
 		}
 		
-		public Dictionary<object, object> GetProUsers()
+		public Dictionary<string, object> GetProUsers()
 		{
 			return _session.Execute("pro.users");
 		}
 		
-		public Dictionary<object, object> RegisterPro(string productKey)
+		public Dictionary<string, object> RegisterPro(string productKey)
 		{
 			return _session.Execute("pro.register", productKey);
 		}
 		
-		public Dictionary<object, object> ActivatePro(Dictionary<object, object> options)
+		public Dictionary<string, object> ActivatePro(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.activate", options);
 		}
 		
-		public Dictionary<object, object> ActivateProOffline(string activationPath)
+		public Dictionary<string, object> ActivateProOffline(string activationPath)
 		{
 			return _session.Execute("pro.activate_offline", activationPath );
 		}
 		
-		public Dictionary<object, object> GetProLicense()
+		public Dictionary<string, object> GetProLicense()
 		{
 			return _session.Execute("pro.license");
 		}
 		
-		public Dictionary<object, object> RevertProLicense()
+		public Dictionary<string, object> RevertProLicense()
 		{
 			return _session.Execute("pro.revert_license");
 		}
 		
-		public Dictionary<object, object> ProUpdatesAvailable(Dictionary<object, object> options)
+		public Dictionary<string, object> ProUpdatesAvailable(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.update_available", options);
 		}
 		
-		public Dictionary<object, object> ProInstallUpdates(Dictionary<object, object> options)
+		public Dictionary<string, object> ProInstallUpdates(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.update_install", options);
 		}
 		
-		public Dictionary<object, object> ProInstallOfflineUpdates(string updatePath)
+		public Dictionary<string, object> ProInstallOfflineUpdates(string updatePath)
 		{
 			return _session.Execute("pro.update_install_offline", updatePath);
 		}
 		
-		public Dictionary<object, object> ProUpdateStatus()
+		public Dictionary<string, object> ProUpdateStatus()
 		{
 			return _session.Execute("pro.update_status");
 		}
 		
-		public Dictionary<object, object> ProStopUpdates()
+		public Dictionary<string, object> ProStopUpdates()
 		{
 			return _session.Execute("pro.update_stop");
 		}
 		
-		public Dictionary<object, object> RestartPro()
+		public Dictionary<string, object> RestartPro()
 		{
 			return _session.Execute("pro.restart_service");
 		}
 		
-		public Dictionary<object, object> GetProTasks()
+		public Dictionary<string, object> GetProTasks()
 		{
 			return _session.Execute("pro.task_list");
 		}
 		
-		public Dictionary<object, object> GetProTaskStatus(string taskID)
+		public Dictionary<string, object> GetProTaskStatus(string taskID)
 		{
 			return _session.Execute("pro.task_status", taskID);
 		}
 		
-		public Dictionary<object, object> StopProTask(string taskID)
+		public Dictionary<string, object> StopProTask(string taskID)
 		{
 			return _session.Execute("pro.task_stop", taskID);
 		}
 		
-		public Dictionary<object, object> GetProTaskLog(string taskID)
+		public Dictionary<string, object> GetProTaskLog(string taskID)
 		{
 			return _session.Execute("pro.task_log", taskID);
 		}
 		
-		public Dictionary<object, object> DeleteProTaskLog(string taskID)
+		public Dictionary<string, object> DeleteProTaskLog(string taskID)
 		{
 			return _session.Execute("pro.task_delete_log");
 		}
 		
-		public Dictionary<object, object> StartDiscover(Dictionary<object, object> options)
+		public Dictionary<string, object> StartDiscover(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.start_discover", options);
 		}
 		
-		public Dictionary<object, object> StartImport(Dictionary<object, object> options)
+		public Dictionary<string, object> StartImport(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.start_import", options);
 		}
 		
-		public Dictionary<object, object> StartCredentialImport(Dictionary<object, object> options)
+		public Dictionary<string, object> StartCredentialImport(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.start_import_creds", options);
 		}
 		
-		public Dictionary<object, object> StartNexposeAssessment(Dictionary<object, object> options)
+		public Dictionary<string, object> StartNexposeAssessment(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.start_nexpose", options);
 		}
 		
-		public Dictionary<object, object> StartBruteforce(Dictionary<object, object> options)
+		public Dictionary<string, object> StartBruteforce(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.start_bruteforce", options);
 		}
 		
-		public Dictionary<object, object> StartExploit(Dictionary<object, object> options)
+		public Dictionary<string, object> StartExploit(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.start_exploit", options);
 		}
 		
-		public Dictionary<object, object> StartWebscan(Dictionary<object, object> options)
+		public Dictionary<string, object> StartWebscan(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.start_webscan", options);
 		}
 		
-		public Dictionary<object, object> StartWebAudit(Dictionary<object, object> options)
+		public Dictionary<string, object> StartWebAudit(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.start_webaudit", options);
 		}
 		
-		public Dictionary<object, object> StartWebSploit(Dictionary<object, object> options)
+		public Dictionary<string, object> StartWebSploit(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.start_websploit", options);
 		}
 		
-		public Dictionary<object, object> StartCleanup(Dictionary<object, object> options)
+		public Dictionary<string, object> StartCleanup(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.start_cleanup", options);
 		}
 		
-		public Dictionary<object, object> StartLootCollection(Dictionary<object, object> options)
+		public Dictionary<string, object> StartLootCollection(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.start_collect", options);
 		}
 		
-		public Dictionary<object, object> StartReport(Dictionary<object, object> options)
+		public Dictionary<string, object> StartReport(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.start_report", options);
 		}
 		
-		public Dictionary<object, object> ImportData(string workspace, string data, Dictionary<object, object> options)
+		public Dictionary<string, object> ImportData(string workspace, string data, Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.import_data", workspace, data, options);
 		}
 		
-		public Dictionary<object, object> ImportFile(string workspace, string path, Dictionary<object, object> options)
+		public Dictionary<string, object> ImportFile(string workspace, string path, Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.import_file", workspace, path, options);
 		}
 		
-		public Dictionary<object, object> ValidateImportFile(string filepath)
+		public Dictionary<string, object> ValidateImportFile(string filepath)
 		{
 			return _session.Execute("pro.validate_import_file", filepath);
 		}
 		
-		public Dictionary<object, object> DownloadLoot(int lootID)
+		public Dictionary<string, object> DownloadLoot(int lootID)
 		{
 			return _session.Execute("pro.loot_download", lootID);
 		}
 		
-		public Dictionary<object, object> ListLoot(string workspace)
+		public Dictionary<string, object> ListLoot(string workspace)
 		{
 			return _session.Execute("pro.loot_list", workspace);
 		}
 		
-		public Dictionary<object, object> SearchProModules(string query)
+		public Dictionary<string, object> SearchProModules(string query)
 		{
 			return _session.Execute("pro.module_search", query);
 		}
 		
-		public Dictionary<object, object> ValidateProModule(string moduleName, Dictionary<object, object> options)
+		public Dictionary<string, object> ValidateProModule(string moduleName, Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.module_validate", moduleName, options);
 		}
 		
-		public Dictionary<object, object> ListProModules()
+		public Dictionary<string, object> ListProModules()
 		{
 			return _session.Execute("pro.report_list");
 		}
 		
-		public Dictionary<object, object> DownloadReport(string reportID)
+		public Dictionary<string, object> DownloadReport(string reportID)
 		{
 			return _session.Execute("pro.report_download");
 		}
 		
-		public Dictionary<object, object> DownloadReportByTask(string taskID)
+		public Dictionary<string, object> DownloadReportByTask(string taskID)
 		{
 			return _session.Execute("pro.report_download_by_task", taskID);
 		}
 		
-		public Dictionary<object, object> GetReportList(string workspace)
+		public Dictionary<string, object> GetReportList(string workspace)
 		{
 			return _session.Execute("pro.report_list", workspace);
 		}
 		
-		public Dictionary<object, object> MeterpreterChDir(string sessionID, string path)
+		public Dictionary<string, object> MeterpreterChDir(string sessionID, string path)
 		{
 			return _session.Execute("pro.meterpreter_chdir", sessionID, path);
 		}
 		
-		public Dictionary<object, object> MeterpreterGetCWD(string sessionID)
+		public Dictionary<string, object> MeterpreterGetCWD(string sessionID)
 		{
 			return _session.Execute("pro.meterpreter_getcwd", sessionID);
 		}
 		
-		public Dictionary<object, object> MeterpreterListDirectory(string sessionID, string path)
+		public Dictionary<string, object> MeterpreterListDirectory(string sessionID, string path)
 		{
 			return _session.Execute("pro.meterpreter_list", sessionID, path);
 		}
 		
-		public Dictionary<object, object> MeterpreterRemoveFileOrDirectory(string sessionID, string path)
+		public Dictionary<string, object> MeterpreterRemoveFileOrDirectory(string sessionID, string path)
 		{
 			return _session.Execute("pro.meterpreter_rm", sessionID, path);
 		}
 		
-		public Dictionary<object, object> MeterpreterRootPaths(string sessionID)
+		public Dictionary<string, object> MeterpreterRootPaths(string sessionID)
 		{
 			return _session.Execute("pro.meterpreter_root_paths", sessionID);
 		}
 		
-		public Dictionary<object, object> MeterpreterSearch(string sessionID, string query)
+		public Dictionary<string, object> MeterpreterSearch(string sessionID, string query)
 		{
 			return _session.Execute("pro.meterpreter_search", sessionID, query);
 		}
 		
-		public Dictionary<object, object> MeterpreterTunnelInterfaces(string sessionID)
+		public Dictionary<string, object> MeterpreterTunnelInterfaces(string sessionID)
 		{
 			return _session.Execute("pro.meterpreter_tunnel_interfaces", sessionID);
 		}

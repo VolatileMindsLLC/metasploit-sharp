@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>CreateWorkspace</RootNamespace>
     <AssemblyName>CreateWorkspace</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <StartupObject>CreateWorkspace.MainClass</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,7 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
-    <Externalconsole>true</Externalconsole>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -43,6 +43,10 @@
     <ProjectReference Include="..\metasploit-sharp\metasploit-sharp.csproj">
       <Project>{7406EF69-41DD-467A-90F9-BB34FBC39C0C}</Project>
       <Name>metasploit-sharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\msgpack\src\MsgPack.Mono\MsgPack.Mono.csproj">
+      <Project>{6E8C2296-21E9-4113-89C4-76376516AA14}</Project>
+      <Name>MsgPack.Mono</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

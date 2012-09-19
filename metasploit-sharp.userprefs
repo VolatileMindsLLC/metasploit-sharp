@@ -1,32 +1,39 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="StartImport/Main.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ModuleExecuteExample/Main.cs">
     <Files>
-      <File FileName="metasploit-sharp/MetasploitManager.cs" Line="77" Column="23" />
-      <File FileName="metasploit-sharp/MetasploitSession.cs" Line="144" Column="32" />
+      <File FileName="metasploit-sharp/MetasploitManager.cs" Line="77" Column="1" />
+      <File FileName="metasploit-sharp/MetasploitSession.cs" Line="90" Column="27" />
       <File FileName="StartImport/Main.cs" Line="36" Column="35" />
-      <File FileName="Examples/Main.cs" Line="1" Column="1" />
-      <File FileName="ModuleExecuteExample/Main.cs" Line="1" Column="1" />
-      <File FileName="StartExploit/Main.cs" Line="1" Column="1" />
-      <File FileName="CreateWorkspace/Main.cs" Line="1" Column="1" />
-      <File FileName="GetReportForWorkspace/Main.cs" Line="1" Column="1" />
+      <File FileName="Examples/Main.cs" Line="77" Column="1" />
+      <File FileName="ModuleExecuteExample/Main.cs" Line="34" Column="6" />
+      <File FileName="CreateWorkspace/Main.cs" Line="35" Column="1" />
+      <File FileName="../msgpack/src/MsgPack/Serialization/MessagePackSerializer`1.cs" Line="161" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Examples" expanded="True" />
-          <Node name="metasploit-sharp" expanded="True" />
-          <Node name="ModuleExecuteExample" expanded="True" />
-          <Node name="StartExploit" expanded="True" />
-          <Node name="StartImport" expanded="True">
-            <Node name="Main.cs" selected="True" />
+          <Node name="CreateWorkspace" expanded="True" />
+          <Node name="Examples" expanded="True">
+            <Node name="References" expanded="True" />
           </Node>
+          <Node name="GetReportForWorkspace" expanded="True" />
+          <Node name="metasploit-sharp" expanded="True" />
+          <Node name="ModuleExecuteExample" expanded="True" selected="True">
+            <Node name="References" expanded="True" />
+          </Node>
+          <Node name="MsgPack.Mono" expanded="True">
+            <Node name="Serialization" expanded="True" />
+          </Node>
+          <Node name="StartExploit" expanded="True" />
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/home/bperry/Projects/metasploit-sharp/CreateWorkspace/Main.cs" line="35" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

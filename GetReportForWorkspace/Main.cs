@@ -12,7 +12,7 @@ namespace GetReportForWorkspace
 			{
 				using (MetasploitProManager manager = new MetasploitProManager(session))
 				{
-					Dictionary<object, object> options = new Dictionary<object, object>();
+					Dictionary<string, object> options = new Dictionary<string, object>();
 					options.Add("DS_WHITELIST_HOSTS", string.Empty);
 					options.Add("DS_BLACKLIST_HOSTS", string.Empty);
 					options.Add("workspace", "default");
@@ -34,7 +34,7 @@ namespace GetReportForWorkspace
 					options.Add("DS_EnableFISMAReport", true);
 					options.Add("DS_JasperDIsplayWeb", true);
 					
-					Dictionary<object, object> response = manager.StartReport(options);
+					Dictionary<string, object> response = manager.StartReport(options);
 					
 					foreach (var pair in response)
 						Console.WriteLine(pair.Key + ": " + pair.Value);
@@ -50,11 +50,11 @@ namespace GetReportForWorkspace
 						string status = string.Empty;
 						foreach (var pair in response)
 						{
-							Console.WriteLine(enc.GetString(pair.Key as byte[]) + ":");
-							foreach (var p in pair.Value as Dictionary<object, object>)
+							Console.WriteLine(pair.Key + ":");
+							foreach (var p in pair.Value as Dictionary<string, object>)
 								Console.WriteLine(p.Key + ": " + p.Value);
 							
-							status = (pair.Value as Dictionary<object, object>)["status"] as string;
+							status = (pair.Value as Dictionary<string, object>)["status"] as string;
 						}
 													
 						if (status != "running")

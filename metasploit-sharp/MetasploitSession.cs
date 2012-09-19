@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
-using MsgPack;
 using System.Net;
 using System.IO;
 using System.Net.Sockets;
+using MsgPack.Serialization;
+using MsgPack;
+using System.Collections.Specialized;
+using System.Text;
 
 namespace metasploitsharp
 {
@@ -17,9 +20,15 @@ namespace metasploitsharp
 			_host = host;
 			_token = null;
 			
-			Dictionary<object, object > response = this.Authenticate (username, password);
+			Dictionary<string, object > response = this.Authenticate (username, password);
 			
 			bool loggedIn = !response.ContainsKey ("error");
+			
+			foreach (var pair in response)
+			{
+				Console.WriteLine(pair.Key + ": " + pair.Value);
+				Console.WriteLine(pair.Key.GetType().Name + ": " + pair.Value.GetType().Name);
+			}
 			
 			if (!loggedIn)
 				throw new Exception (response ["error_message"] as string);
@@ -32,12 +41,12 @@ namespace metasploitsharp
 			get { return _token; }
 		}
 		
-		public Dictionary<object, object> Authenticate (string username, string password)
+		public Dictionary<string, object> Authenticate (string username, string password)
 		{
 			return this.Execute ("auth.login", username, password);
 		}
 		
-		public Dictionary<object, object> Execute (string method, params object[] args)
+		public Dictionary<string, object> Execute (string method, params object[] args)
 		{
 			if (string.IsNullOrEmpty (_host))
 				throw new Exception ("Host null or empty");
@@ -45,7 +54,6 @@ namespace metasploitsharp
 			if (method != "auth.login" && string.IsNullOrEmpty (_token))
 				throw new Exception ("Not authenticated.");
 		
-			BoxingPacker boxingPacker = new BoxingPacker ();
 			ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => {return true;}; //dis be bad, no ssl check
 			
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create (_host);
@@ -54,14 +62,14 @@ namespace metasploitsharp
 			request.KeepAlive = true;
 			
 			Stream requestStream = request.GetRequestStream ();
-			MsgPackWriter msgpackWriter = new MsgPackWriter (requestStream);
+			Packer msgpackWriter = Packer.Create(requestStream);
 			
-			msgpackWriter.WriteArrayHeader (args.Length + 1 + (string.IsNullOrEmpty (_token) ? 0 : 1));
+			msgpackWriter.PackArrayHeader (args.Length + 1 + (string.IsNullOrEmpty (_token) ? 0 : 1));
 			
-			msgpackWriter.Write (method);
+			msgpackWriter.Pack (method);
 			
 			if (!string.IsNullOrEmpty (_token))
-				msgpackWriter.Write (_token);
+				msgpackWriter.Pack (_token);
 			
 			foreach (object arg in args) 
 				Pack(msgpackWriter, arg);
@@ -70,124 +78,139 @@ namespace metasploitsharp
 			
 			byte[] results;
 			byte[] buffer = new byte[4096];
+			MemoryStream mstream = new MemoryStream();
 			using (WebResponse response = request.GetResponse ())
 			{
 				using (Stream rstream = response.GetResponseStream())
 				{
-					using (MemoryStream mstream = new MemoryStream())
+					int count = 0;
+					
+					do
 					{
-						int count = 0;
-						
-						do
-						{
-							count = rstream.Read(buffer, 0, buffer.Length);
-							mstream.Write(buffer, 0, count);
-						} while (count != 0);
-						
-						results = mstream.ToArray();
-					}
+						count = rstream.Read(buffer, 0, buffer.Length);
+						mstream.Write(buffer, 0, count);
+					} while (count != 0);
+					
 				}
 			}
-
+			
+			mstream.Position = 0;
+			var unpacker = MessagePackSerializer.Create<Dictionary<string, object>>();
 			
 			//everything is a bunch of bytes, needs to be typed
-			Dictionary<object, object > resp = boxingPacker.Unpack (results) as Dictionary<object, object>;
+			IDictionary<MessagePackObject,MessagePackObject> resp = Unpacking.UnpackDictionary(mstream);
 			
 			//This is me trying to type the response for the user....
-			Dictionary<object, object > returnDictionary = TypifyDictionary(resp);
+			Dictionary<string, object > returnDictionary = TypifyDictionary(resp);
 			
 			return returnDictionary;
 		}
 		
-		Dictionary<object, object> TypifyDictionary(Dictionary<object, object> dict)
+		Dictionary<string, object> TypifyDictionary(IDictionary<MessagePackObject, MessagePackObject> dict)
 		{
-			Dictionary<object, object> returnDictionary = new Dictionary<object, object>();
-			System.Text.Encoding enc = System.Text.Encoding.UTF8;
+			Dictionary<string, object> returnDictionary = new Dictionary<string, object>();
+			
 			foreach (var pair in dict)
 			{
-				if (pair.Value != null) {
-					if (pair.Value is bool)
-						returnDictionary.Add (enc.GetString (pair.Key as byte[]), ((bool)pair.Value).ToString ());
-					else if (pair.Value is byte[])
-						returnDictionary.Add (enc.GetString (pair.Key as byte[]), enc.GetString (pair.Value as byte[]));
-					else if (pair.Value is object[])
+				MessagePackObject obj = (MessagePackObject)pair.Value;
+				
+				if (obj.UnderlyingType == null)
+					continue;
+				
+				if (obj.IsRaw)
+				{
+					if (obj.IsTypeOf(typeof(string)).Value)
+						returnDictionary[pair.Key.AsString()] = new string(obj.AsCharArray());
+					else if (obj.IsTypeOf(typeof(int)).Value)
+						returnDictionary[pair.Key.AsString()] = (int)obj.ToObject();
+					else 
+						throw new Exception("I don't know type: " + pair.Value.GetType().Name);
+				}
+				else if (obj.IsArray)
+				{
+					List<object> arr = new List<object>();
+					//Console.WriteLine(obj.UnderlyingType.Name);
+					foreach (var o in obj.ToObject() as MessagePackObject[])
 					{
-						object[] ret = new object[(pair.Value as object[]).Length];
-						int i = 0;
-						foreach (object obj in pair.Value as object[])
-						{
-							if (obj is Dictionary<object, object>)
-								ret[i] = TypifyDictionary(obj as Dictionary<object, object>);
-							else if (obj is byte[])
-								ret[i] = enc.GetString(obj as byte[]);
-							else
-								throw new Exception("Don't know how to do type: " + obj.GetType().ToString());
-							
-							i++;
-						}
-						
-						returnDictionary.Add(enc.GetString(pair.Key as byte[]), ret);
+						if (o.IsDictionary)
+							arr.Add(TypifyDictionary(o.AsDictionary()));
+						else if (o.IsRaw)
+							arr.Add(o.AsString());
 					}
-					else if (pair.Value is UInt32)
-						returnDictionary.Add (enc.GetString (pair.Key as byte[]), ((UInt32)pair.Value).ToString ());
-					else if (pair.Value is Int32)
-						returnDictionary.Add (enc.GetString (pair.Key as byte[]), ((Int32)pair.Value).ToString ());
-					else if (pair.Value is Dictionary<object, object>)
-						returnDictionary.Add (pair.Key, TypifyDictionary(pair.Value as Dictionary<object, object>));
-					else
-						throw new Exception ("unknown type: " + pair.Value.GetType().ToString());
-				} else
-					returnDictionary.Add (enc.GetString (pair.Key as byte[]), string.Empty);
+					
+					returnDictionary.Add(pair.Key.AsString(), arr);
+				}
+				else if (obj.IsDictionary)
+				{
+					returnDictionary[pair.Key.AsString()] = TypifyDictionary(obj.AsDictionary() as IDictionary<MessagePackObject, MessagePackObject>);
+				}
+				else if (obj.IsTypeOf(typeof(UInt16)).Value)
+				{
+					returnDictionary[pair.Key.AsString()] = obj.AsUInt16();
+				}
+				else if (obj.IsTypeOf(typeof(UInt32)).Value)
+					returnDictionary[pair.Key.AsString()] = obj.AsUInt32();
+				else if (obj.IsTypeOf(typeof(bool)).Value)
+					returnDictionary[pair.Key.AsString()] = obj.AsBoolean();
+				else 
+					throw new Exception("hey what the fuck are you: " + obj.ToObject().GetType().Name);
 			}
 			
 			return returnDictionary;
 		}
 		
-		void Pack (MsgPackWriter writer, object o)
+		void Pack (Packer packer, object o)
 		{
  	 	
 			if (o == null) {
-				writer.WriteNil ();
+				packer.PackNull();
 				return;
 			}
  	
 			if (o is int)
-				writer.Write ((int)o);
+				packer.Pack ((int)o);
 			else if (o is uint)
-				writer.Write ((uint)o);
+				packer.Pack ((uint)o);
 			else if (o is float)
-				writer.Write ((float)o);
+				packer.Pack ((float)o);
 			else if (o is double)
-				writer.Write ((double)o);
+				packer.Pack ((double)o);
 			else if (o is long)
-				writer.Write ((long)o);
+				packer.Pack ((long)o);
 			else if (o is ulong)
-				writer.Write ((ulong)o);
+				packer.Pack ((ulong)o);
 			else if (o is bool)
-				writer.Write ((bool)o);
+				packer.Pack ((bool)o);
 			else if (o is byte)
-				writer.Write ((byte)o);
+				packer.Pack ((byte)o);
 			else if (o is sbyte)
-				writer.Write ((sbyte)o);
+				packer.Pack ((sbyte)o);
 			else if (o is short)
-				writer.Write ((short)o);
+				packer.Pack ((short)o);
 			else if (o is ushort)
-				writer.Write ((ushort)o);
+				packer.Pack ((ushort)o);
 			else if (o is string)
-				writer.Write(o as string);
-			else if (o is Dictionary<object, object>)
+				packer.Pack(o as string);
+			else if (o is Dictionary<string, object>)
 			{
-				writer.WriteMapHeader((o as Dictionary<object, object>).Count);
+				packer.PackMapHeader((o as Dictionary<string, object>).Count);
 				
-				foreach (var pair in (o as Dictionary<object, object>))
+				foreach (var pair in (o as Dictionary<string, object>))
 				{
-					Pack(writer, pair.Key);
-					Pack(writer, pair.Value);
+					Pack(packer, pair.Key);
+					Pack(packer, pair.Value);
 				}
 				
 			}
+			else if (o is string[])
+			{
+				packer.PackArrayHeader((o as string[]).Length);
+				
+				foreach (var obj in (o as string[]))
+					packer.Pack(obj as string);
+			}
 			else
-				throw new NotSupportedException (); 
+				throw new Exception("Cant handle type: " + o.GetType().Name);; 
 		
 		}
 		

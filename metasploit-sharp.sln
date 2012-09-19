@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "metasploit-sharp", "metaspl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples", "Examples\Examples.csproj", "{0BBE3B7A-F7C9-4EF2-B47A-988531261A5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsgPack", "..\msgpack\csharp\MsgPack\MsgPack.csproj", "{E1809531-EC2A-4EA6-B0E8-CC815EDFAA2F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleExecuteExample", "ModuleExecuteExample\ModuleExecuteExample.csproj", "{F48E0B9A-9F7A-4E46-B1D4-1386420D4C15}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartImport", "StartImport\StartImport.csproj", "{6751C52A-1C35-40C0-ABCF-B5EC9ED493F4}"
@@ -16,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateWorkspace", "CreateWorkspace\CreateWorkspace.csproj", "{3D4A7E00-AC56-4B9E-962C-BD576B00773B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetReportForWorkspace", "GetReportForWorkspace\GetReportForWorkspace.csproj", "{6F64EB08-24E8-4735-8A9F-7DA3D0E934C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsgPack.Mono", "..\msgpack\src\MsgPack.Mono\MsgPack.Mono.csproj", "{6E8C2296-21E9-4113-89C4-76376516AA14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +35,10 @@ Global
 		{6751C52A-1C35-40C0-ABCF-B5EC9ED493F4}.Debug|x86.Build.0 = Debug|x86
 		{6751C52A-1C35-40C0-ABCF-B5EC9ED493F4}.Release|x86.ActiveCfg = Release|x86
 		{6751C52A-1C35-40C0-ABCF-B5EC9ED493F4}.Release|x86.Build.0 = Release|x86
+		{6E8C2296-21E9-4113-89C4-76376516AA14}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6E8C2296-21E9-4113-89C4-76376516AA14}.Debug|x86.Build.0 = Debug|Any CPU
+		{6E8C2296-21E9-4113-89C4-76376516AA14}.Release|x86.ActiveCfg = Release|Any CPU
+		{6E8C2296-21E9-4113-89C4-76376516AA14}.Release|x86.Build.0 = Release|Any CPU
 		{6F64EB08-24E8-4735-8A9F-7DA3D0E934C7}.Debug|x86.ActiveCfg = Debug|x86
 		{6F64EB08-24E8-4735-8A9F-7DA3D0E934C7}.Debug|x86.Build.0 = Debug|x86
 		{6F64EB08-24E8-4735-8A9F-7DA3D0E934C7}.Release|x86.ActiveCfg = Release|x86
@@ -47,16 +51,12 @@ Global
 		{B6DBD3CF-7367-49AC-920B-D3D06846C3A5}.Debug|x86.Build.0 = Debug|x86
 		{B6DBD3CF-7367-49AC-920B-D3D06846C3A5}.Release|x86.ActiveCfg = Release|x86
 		{B6DBD3CF-7367-49AC-920B-D3D06846C3A5}.Release|x86.Build.0 = Release|x86
-		{E1809531-EC2A-4EA6-B0E8-CC815EDFAA2F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E1809531-EC2A-4EA6-B0E8-CC815EDFAA2F}.Debug|x86.Build.0 = Debug|Any CPU
-		{E1809531-EC2A-4EA6-B0E8-CC815EDFAA2F}.Release|x86.ActiveCfg = Release|Any CPU
-		{E1809531-EC2A-4EA6-B0E8-CC815EDFAA2F}.Release|x86.Build.0 = Release|Any CPU
 		{F48E0B9A-9F7A-4E46-B1D4-1386420D4C15}.Debug|x86.ActiveCfg = Debug|x86
 		{F48E0B9A-9F7A-4E46-B1D4-1386420D4C15}.Debug|x86.Build.0 = Debug|x86
 		{F48E0B9A-9F7A-4E46-B1D4-1386420D4C15}.Release|x86.ActiveCfg = Release|x86
 		{F48E0B9A-9F7A-4E46-B1D4-1386420D4C15}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = ModuleExecuteExample\ModuleExecuteExample.csproj
+		StartupItem = CreateWorkspace\CreateWorkspace.csproj
 	EndGlobalSection
 EndGlobal
