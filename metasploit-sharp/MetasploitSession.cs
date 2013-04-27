@@ -75,8 +75,7 @@ namespace metasploitsharp
 				Pack(msgpackWriter, arg);
 			
 			requestStream.Close();
-			
-			byte[] results;
+
 			byte[] buffer = new byte[4096];
 			MemoryStream mstream = new MemoryStream();
 			using (WebResponse response = request.GetResponse ())
@@ -95,7 +94,6 @@ namespace metasploitsharp
 			}
 			
 			mstream.Position = 0;
-			var unpacker = MessagePackSerializer.Create<Dictionary<string, object>>();
 			
 			//everything is a bunch of bytes, needs to be typed
 			IDictionary<MessagePackObject,MessagePackObject> resp = Unpacking.UnpackDictionary(mstream);
