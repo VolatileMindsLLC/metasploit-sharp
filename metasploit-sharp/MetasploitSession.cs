@@ -7,6 +7,7 @@ using MsgPack.Serialization;
 using MsgPack;
 using System.Collections.Specialized;
 using System.Text;
+using System.Collections;
 
 namespace metasploitsharp
 {
@@ -24,8 +25,7 @@ namespace metasploitsharp
 			
 			bool loggedIn = !response.ContainsKey ("error");
 			
-			foreach (var pair in response)
-			{
+			foreach (var pair in response) {
 				Console.WriteLine(pair.Key + ": " + pair.Value);
 				Console.WriteLine(pair.Key.GetType().Name + ": " + pair.Value.GetType().Name);
 			}
@@ -57,6 +57,7 @@ namespace metasploitsharp
 			ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => {return true;}; //dis be bad, no ssl check
 			
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create (_host);
+
 			request.ContentType = "binary/message-pack";
 			request.Method = "POST";
 			request.KeepAlive = true;
@@ -66,9 +67,9 @@ namespace metasploitsharp
 			
 			msgpackWriter.PackArrayHeader (args.Length + 1 + (string.IsNullOrEmpty (_token) ? 0 : 1));
 			
-			msgpackWriter.Pack (method);
+			msgpackWriter.PackString (method);
 			
-			if (!string.IsNullOrEmpty (_token))
+			if (!string.IsNullOrEmpty (_token) && method != "auth.login")
 				msgpackWriter.Pack (_token);
 			
 			foreach (object arg in args) 
@@ -78,6 +79,8 @@ namespace metasploitsharp
 
 			byte[] buffer = new byte[4096];
 			MemoryStream mstream = new MemoryStream();
+
+			try {
 			using (WebResponse response = request.GetResponse ())
 			{
 				using (Stream rstream = response.GetResponseStream())
@@ -91,6 +94,14 @@ namespace metasploitsharp
 					} while (count != 0);
 					
 				}
+			}
+			}
+			catch (WebException ex) {
+				string res = string.Empty;
+				using (StreamReader rdr = new StreamReader(ex.Response.GetResponseStream()))
+					res = rdr.ReadToEnd();
+
+				Console.WriteLine(res) ;
 			}
 			
 			mstream.Position = 0;
@@ -118,7 +129,7 @@ namespace metasploitsharp
 				if (obj.IsRaw)
 				{
 					if (obj.IsTypeOf(typeof(string)).Value)
-						returnDictionary[pair.Key.AsString()] = new string(obj.AsCharArray());
+						returnDictionary[pair.Key.ToString()] = obj.ToString();
 					else if (obj.IsTypeOf(typeof(int)).Value)
 						returnDictionary[pair.Key.AsString()] = (int)obj.ToObject();
 					else 
@@ -127,13 +138,21 @@ namespace metasploitsharp
 				else if (obj.IsArray)
 				{
 					List<object> arr = new List<object>();
-					//Console.WriteLine(obj.UnderlyingType.Name);
 					foreach (var o in obj.ToObject() as MessagePackObject[])
 					{
 						if (o.IsDictionary)
 							arr.Add(TypifyDictionary(o.AsDictionary()));
 						else if (o.IsRaw)
 							arr.Add(o.AsString());
+						else if (o.IsArray)
+						{
+							var enu = o.AsEnumerable();
+							List<object> array = new List<object>();
+							foreach (var blah in enu)
+								array.Add(blah as object);
+
+							arr.Add(array.ToArray());
+						}
 					}
 					
 					returnDictionary.Add(pair.Key.AsString(), arr);
@@ -188,7 +207,7 @@ namespace metasploitsharp
 			else if (o is ushort)
 				packer.Pack ((ushort)o);
 			else if (o is string)
-				packer.Pack(o as string);
+				packer.PackString((string)o, Encoding.ASCII);
 			else if (o is Dictionary<string, object>)
 			{
 				packer.PackMapHeader((o as Dictionary<string, object>).Count);
