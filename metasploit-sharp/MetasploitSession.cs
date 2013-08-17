@@ -35,6 +35,12 @@ namespace metasploitsharp
 			
 			if ((response ["result"] as string) == "success")
 				_token = response ["token"] as string;
+		} 
+
+		public MetasploitSession (string token, string host)
+		{
+			_token = token;
+			_host = host;
 		}
 		
 		public string Token { 
