@@ -132,7 +132,7 @@ namespace metasploitsharp
 					if (obj.IsTypeOf(typeof(string)).Value)
 						returnDictionary[pair.Key.ToString()] = obj.ToString();
 					else if (obj.IsTypeOf(typeof(int)).Value)
-						returnDictionary[pair.Key.AsString()] = (int)obj.ToObject();
+						returnDictionary[pair.Key.ToString()] = (int)obj.ToObject();
 					else 
 						throw new Exception("I don't know type: " + pair.Value.GetType().Name);
 				}
@@ -144,7 +144,7 @@ namespace metasploitsharp
 						if (o.IsDictionary)
 							arr.Add(TypifyDictionary(o.AsDictionary()));
 						else if (o.IsRaw)
-							arr.Add(o.AsString());
+							arr.Add(o.ToString());
 						else if (o.IsArray)
 						{
 							var enu = o.AsEnumerable();
@@ -159,19 +159,15 @@ namespace metasploitsharp
 					returnDictionary.Add(pair.Key.AsString(), arr);
 				}
 				else if (obj.IsDictionary)
-				{
 					returnDictionary[pair.Key.AsString()] = TypifyDictionary(obj.AsDictionary());
-				}
 				else if (obj.IsTypeOf(typeof(UInt16)).Value)
-				{
-					returnDictionary[pair.Key.AsString()] = obj.AsUInt16();
-				}
+					returnDictionary[pair.Key.ToString()] = obj.AsUInt16();
 				else if (obj.IsTypeOf(typeof(UInt32)).Value)
-					returnDictionary[pair.Key.AsString()] = obj.AsUInt32();
+					returnDictionary[pair.Key.ToString()] = obj.AsUInt32();
 				else if (obj.IsTypeOf(typeof(bool)).Value)
-					returnDictionary[pair.Key.AsString()] = obj.AsBoolean();
+					returnDictionary[pair.Key.ToString()] = obj.AsBoolean();
 				else 
-					throw new Exception("hey what the fuck are you: " + obj.ToObject().GetType().Name);
+					throw new Exception("Don't know type: " + obj.ToObject().GetType().Name);
 			}
 			
 			return returnDictionary;
