@@ -159,7 +159,7 @@ namespace metasploitsharp
 					returnDictionary.Add(pair.Key.AsString(), arr);
 				}
 				else if (obj.IsDictionary)
-					returnDictionary[pair.Key.AsString()] = TypifyDictionary(obj.AsDictionary());
+					returnDictionary[pair.Key.ToString()] = TypifyDictionary(obj.AsDictionary());
 				else if (obj.IsTypeOf(typeof(UInt16)).Value)
 					returnDictionary[pair.Key.ToString()] = obj.AsUInt16();
 				else if (obj.IsTypeOf(typeof(UInt32)).Value)
