@@ -107,7 +107,8 @@ namespace metasploitsharp
 			mstream.Position = 0;
 			
 			//everything is a bunch of bytes, needs to be typed
-			IDictionary<MessagePackObject,MessagePackObject> resp = Unpacking.UnpackDictionary(mstream);
+			MessagePackObjectDictionary resp = Unpacking.UnpackObject(mstream).AsDictionary();
+			//Hashtable resp = Unpacking.UnpackDictionary(mstream);
 			
 			//This is me trying to type the response for the user....
 			Dictionary<string, object > returnDictionary = TypifyDictionary(resp);
@@ -115,7 +116,7 @@ namespace metasploitsharp
 			return returnDictionary;
 		}
 		
-		Dictionary<string, object> TypifyDictionary(IDictionary<MessagePackObject, MessagePackObject> dict)
+		Dictionary<string, object> TypifyDictionary(MessagePackObjectDictionary dict)
 		{
 			Dictionary<string, object> returnDictionary = new Dictionary<string, object>();
 			
@@ -159,7 +160,7 @@ namespace metasploitsharp
 				}
 				else if (obj.IsDictionary)
 				{
-					returnDictionary[pair.Key.AsString()] = TypifyDictionary(obj.AsDictionary() as IDictionary<MessagePackObject, MessagePackObject>);
+					returnDictionary[pair.Key.AsString()] = TypifyDictionary(obj.AsDictionary());
 				}
 				else if (obj.IsTypeOf(typeof(UInt16)).Value)
 				{
