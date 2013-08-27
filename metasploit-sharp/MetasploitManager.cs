@@ -215,9 +215,9 @@ namespace metasploitsharp
 		public Dictionary<string, object> ReadSessionShell(string sessionID, int? readPointer)
 		{
 			if (readPointer.HasValue)
-				return _session.Execute("session.read_shell", sessionID, readPointer.Value);
+				return _session.Execute("session.shell_read", sessionID, readPointer.Value);
 			else
-				return _session.Execute("session.read_shell", sessionID);
+				return _session.Execute("session.shell_read", sessionID);
 		}
 		
 		public Dictionary<string, object> WriteToSessionShell(string sessionID, string data)

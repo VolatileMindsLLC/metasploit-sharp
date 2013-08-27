@@ -8,14 +8,14 @@ namespace Examples
 	{
 		public static void Main (string[] args)
 		{
-			using (MetasploitSession session = new MetasploitSession("metasploit", "P@ssw0rd!", "https://192.168.1.5:3790/api/1.1"))
+			using (MetasploitSession session = new MetasploitSession("msfuser", "msfpass", "https://127.0.0.1:55553/"))
 			{
 				using (MetasploitProManager manager = new MetasploitProManager(session))
 				{
 					Dictionary<string, object> modules = manager.GetCoreModuleStats();
 					
 					Console.WriteLine("Module stats:");
-					foreach (KeyValuePair<string, object> pair in modules)
+					foreach (var pair in modules)
 						Console.WriteLine(pair.Key + ": " + pair.Value);
 					
 					Dictionary<string, object> version = manager.GetCoreVersionInformation();
@@ -37,7 +37,7 @@ namespace Examples
 					{
 						Console.WriteLine("\n" + pair.Key + ":");
 						
-						foreach (object obj in (pair.Value as object[]))
+						foreach (object obj in (pair.Value as IList<object>))
 						{
 							//each obj is a Dictionary<string, object> in this response
 							foreach (KeyValuePair<string, object> p in obj as Dictionary<string, object>)

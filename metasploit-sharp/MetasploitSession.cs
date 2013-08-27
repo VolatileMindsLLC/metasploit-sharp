@@ -24,12 +24,7 @@ namespace metasploitsharp
 			Dictionary<string, object > response = this.Authenticate (username, password);
 			
 			bool loggedIn = !response.ContainsKey ("error");
-			
-			foreach (var pair in response) {
-				Console.WriteLine(pair.Key + ": " + pair.Value);
-				Console.WriteLine(pair.Key.GetType().Name + ": " + pair.Value.GetType().Name);
-			}
-			
+
 			if (!loggedIn)
 				throw new Exception (response ["error_message"] as string);
 			

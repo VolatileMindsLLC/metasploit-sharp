@@ -37,7 +37,7 @@ namespace CreateWorkspace
 					{
 						Console.WriteLine(pair.Value.GetType().Name);
 						
-						foreach (var obj in pair.Value as List<object>) 
+						foreach (var obj in pair.Value as IList<object>) 
 						{
 							//each obj is a Dictionary<string, object> in this response
 							if (obj is IDictionary<string, object>)
