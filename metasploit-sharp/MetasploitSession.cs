@@ -154,7 +154,8 @@ namespace metasploitsharp
 								array.Add(blah as object);
 
 							arr.Add(array.ToArray());
-						}
+						}else if (o.ToObject().GetType() == typeof(Byte)) //this is a hack because I don't know what type you are...
+							arr.Add(o.ToString());
 					}
 					
 					returnDictionary.Add(pair.Key.AsString(), arr);

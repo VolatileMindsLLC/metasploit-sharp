@@ -50,17 +50,22 @@ namespace ModuleExecuteExample
 
 					Console.WriteLine ("I popped " + response.Count + " shells. Awesome.");
 
-					foreach (var pair in response) {
-						string id = pair.Key;
-						Dictionary<string, object> dict = (Dictionary<string, object>)pair.Value;
-						if ((dict["type"] as string) == "shell") {
-							response = manager.WriteToSessionShell(id, "id\n");
-							System.Threading.Thread.Sleep(6000);
-							response = manager.ReadSessionShell(id);
-							manager.StopSession(id);
-							Console.WriteLine(response["data"]);
-						}
-					}
+//					foreach (var pair in response) {
+//						string id = pair.Key;
+//						Dictionary<string, object> dict = (Dictionary<string, object>)pair.Value;
+//						if ((dict["type"] as string) == "shell") {
+//							response = manager.WriteToSessionShell(id, "id\n");
+//							System.Threading.Thread.Sleep(6000);
+//							response = manager.ReadSessionShell(id);
+//
+//							Console.WriteLine(response["data"]);
+//
+//							//manager.StopSession(id);
+//						}
+//					}
+
+					Dictionary<string, object> bl = manager.GetModuleCompatibleSessions("multi/general/execute");
+					Console.WriteLine("fdsa");
 				}
 			}
 		}
