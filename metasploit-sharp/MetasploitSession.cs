@@ -8,6 +8,7 @@ using MsgPack;
 using System.Collections.Specialized;
 using System.Text;
 using System.Collections;
+using System.ComponentModel;
 
 namespace metasploitsharp
 {
@@ -130,10 +131,12 @@ namespace metasploitsharp
 				
 				if (obj.IsRaw)
 				{
-					if (obj.IsTypeOf(typeof(string)).Value)
-						returnDictionary[pair.Key.ToString()] = obj.ToString();
-					else if (obj.IsTypeOf(typeof(int)).Value)
-						returnDictionary[pair.Key.ToString()] = (int)obj.ToObject();
+					if (obj.IsTypeOf (typeof(string)).Value)
+						returnDictionary [pair.Key.ToString ()] = obj.ToString ();
+					else if (obj.IsTypeOf (typeof(int)).Value)
+						returnDictionary [pair.Key.ToString ()] = (int)obj.ToObject ();
+					else if (obj.IsTypeOf (typeof(Byte[])).Value)
+						returnDictionary [pair.Key.ToString ()] = (Byte[])obj.ToObject ();
 					else 
 						throw new Exception("I don't know type: " + pair.Value.GetType().Name);
 				}
