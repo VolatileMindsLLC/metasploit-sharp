@@ -9,6 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>metasploitsharp</RootNamespace>
     <AssemblyName>metasploit-sharp</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,7 +42,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\msgpack\src\MsgPack\MsgPack.csproj">
+    <ProjectReference Include="..\..\msgpack-cli\src\MsgPack\MsgPack.csproj">
       <Project>{5BCEC32E-990E-4DE5-945F-BD27326A7418}</Project>
       <Name>MsgPack</Name>
     </ProjectReference>

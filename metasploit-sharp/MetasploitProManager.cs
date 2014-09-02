@@ -187,7 +187,12 @@ namespace metasploitsharp
 		{
 			return _session.Execute("pro.start_collect", options);
 		}
-		
+
+		public Dictionary<string, object> StartSingle (Dictionary<string, object> options)
+		{
+			return _session.Execute("pro.start_single", options);
+		}
+
 		public Dictionary<string, object> StartReport(Dictionary<string, object> options)
 		{
 			return _session.Execute("pro.start_report", options);

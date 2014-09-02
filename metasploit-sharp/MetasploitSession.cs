@@ -65,6 +65,7 @@ namespace metasploitsharp
 			request.KeepAlive = true;
 			
 			Stream requestStream = request.GetRequestStream ();
+
 			Packer msgpackWriter = Packer.Create(requestStream);
 			
 			msgpackWriter.PackArrayHeader (args.Length + 1 + (string.IsNullOrEmpty (_token) ? 0 : 1));
@@ -99,11 +100,13 @@ namespace metasploitsharp
 			}
 			}
 			catch (WebException ex) {
-				string res = string.Empty;
-				using (StreamReader rdr = new StreamReader(ex.Response.GetResponseStream()))
-					res = rdr.ReadToEnd();
+				if (ex.Response != null) {
+					string res = string.Empty;
+					using (StreamReader rdr = new StreamReader(ex.Response.GetResponseStream()))
+						res = rdr.ReadToEnd();
 
-				Console.WriteLine(res) ;
+					Console.WriteLine(res) ;
+				}
 			}
 			
 			mstream.Position = 0;
