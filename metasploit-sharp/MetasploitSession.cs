@@ -134,20 +134,26 @@ namespace metasploitsharp
 			foreach (var pair in dict)
 			{
 				MessagePackObject obj = (MessagePackObject)pair.Value;
-				
+				string key = System.Text.Encoding.ASCII.GetString ((byte[])pair.Key);
+
 				if (obj.UnderlyingType == null)
 					continue;
 				
 				if (obj.IsRaw) {
-					if (obj.UnderlyingType == typeof(string))
-					if (pair.Key.IsRaw && pair.Key.IsTypeOf (typeof(Byte[])).Value)
-						returnDictionary [System.Text.Encoding.ASCII.GetString ((byte[])pair.Key)] = obj.AsString ();
-					else
-						returnDictionary [pair.Key.ToString ()] = obj.AsString ();
+					if (obj.UnderlyingType == typeof(string)) {
+						if (pair.Key.IsRaw && pair.Key.IsTypeOf (typeof(Byte[])).Value)
+							returnDictionary [key] = obj.AsString ();
+						else
+							returnDictionary [pair.Key.ToString ()] = obj.AsString ();
+					}
 					else if (obj.IsTypeOf (typeof(int)).Value)
 						returnDictionary [pair.Key.ToString ()] = (int)obj.ToObject ();
 					else if (obj.IsTypeOf (typeof(Byte[])).Value) {
-						returnDictionary [System.Text.Encoding.ASCII.GetString ((Byte[])pair.Key)] = System.Text.Encoding.ASCII.GetString ((Byte[])obj.ToObject ());
+						if (key == "payload") {
+							returnDictionary [key] = (byte[])obj;
+						}
+						else 
+							returnDictionary [System.Text.Encoding.ASCII.GetString ((Byte[])pair.Key)] = System.Text.Encoding.ASCII.GetString ((Byte[])obj.ToObject ());
 					} else
 						throw new Exception ("I don't know type: " + pair.Value.GetType ().Name);
 				} else if (obj.IsArray) {
