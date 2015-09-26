@@ -116,17 +116,15 @@ namespace metasploitsharp
 			}
 			
 			mstream.Position = 0;
-			
-			//everything is a bunch of bytes, needs to be typed
+
 			MessagePackObjectDictionary resp = Unpacking.UnpackObject(mstream).AsDictionary();
-			//Hashtable resp = Unpacking.UnpackDictionary(mstream);
-			
-			//This is me trying to type the response for the user....
+
 			Dictionary<string, object > returnDictionary = TypifyDictionary(resp);
 			
 			return returnDictionary;
 		}
-		
+
+		//this is a ridiculous method
 		Dictionary<string, object> TypifyDictionary(MessagePackObjectDictionary dict)
 		{
 			Dictionary<string, object> returnDictionary = new Dictionary<string, object>();
@@ -149,11 +147,10 @@ namespace metasploitsharp
 					else if (obj.IsTypeOf (typeof(int)).Value)
 						returnDictionary [pair.Key.ToString ()] = (int)obj.ToObject ();
 					else if (obj.IsTypeOf (typeof(Byte[])).Value) {
-						if (key == "payload") {
+						if (key == "payload") 
 							returnDictionary [key] = (byte[])obj;
-						}
 						else 
-							returnDictionary [System.Text.Encoding.ASCII.GetString ((Byte[])pair.Key)] = System.Text.Encoding.ASCII.GetString ((Byte[])obj.ToObject ());
+							returnDictionary [key] = System.Text.Encoding.ASCII.GetString ((Byte[])obj.ToObject ());
 					} else
 						throw new Exception ("I don't know type: " + pair.Value.GetType ().Name);
 				} else if (obj.IsArray) {
@@ -175,27 +172,27 @@ namespace metasploitsharp
 					}
 
 					if (pair.Key.IsRaw && pair.Key.IsTypeOf (typeof(Byte[])).Value)
-						returnDictionary.Add (System.Text.Encoding.ASCII.GetString ((byte[])pair.Key), arr);
+						returnDictionary.Add (key, arr);
 					else
-						returnDictionary.Add (pair.Key.AsString (), arr);
+						returnDictionary.Add (key, arr);
 				} else if (obj.IsDictionary) {
 					if (pair.Key.IsRaw && pair.Key.IsTypeOf(typeof(Byte[])).Value)
-						returnDictionary [System.Text.Encoding.ASCII.GetString((byte[])pair.Key)] = TypifyDictionary (obj.AsDictionary ());
+						returnDictionary [key] = TypifyDictionary (obj.AsDictionary ());
 					else 
 						returnDictionary [pair.Key.ToString ()] = TypifyDictionary (obj.AsDictionary ());
 				} else if (obj.IsTypeOf (typeof(UInt16)).Value) {
 					if (pair.Key.IsRaw && pair.Key.IsTypeOf (typeof(Byte[])).Value)
-						returnDictionary [System.Text.Encoding.ASCII.GetString ((byte[])pair.Key)] = obj.AsUInt16 ();
+						returnDictionary [key] = obj.AsUInt16 ();
 					else
 						returnDictionary [pair.Key.ToString ()] = obj.AsUInt16 ();
 				} else if (obj.IsTypeOf (typeof(UInt32)).Value) {
 					if (pair.Key.IsRaw && pair.Key.IsTypeOf (typeof(Byte[])).Value)
-						returnDictionary [System.Text.Encoding.ASCII.GetString ((byte[])pair.Key)] = obj.AsUInt32 ();
+						returnDictionary [key] = obj.AsUInt32 ();
 					else
 						returnDictionary [pair.Key.ToString ()] = obj.AsUInt32 ();
 				} else if (obj.IsTypeOf (typeof(bool)).Value) {
 					if (pair.Key.IsRaw && pair.Key.IsTypeOf (typeof(Byte[])).Value)
-						returnDictionary [System.Text.Encoding.ASCII.GetString ((byte[])pair.Key)] = obj.AsBoolean ();
+						returnDictionary [key] = obj.AsBoolean ();
 					else
 						returnDictionary [pair.Key.ToString ()] = obj.AsBoolean ();
 				}
